@@ -1,10 +1,11 @@
-import React from 'react'
 import Banner from '../Home/Banner'
+import Choose from '../Choose/Choose'
 
 const Home = () => {
   return (
     <div>
-    <Banner></Banner>
+      <Banner></Banner>
+      <Choose></Choose>
     </div>
   )
 }
