@@ -77,7 +77,7 @@ const Navbar = () => {
 
           {/* CTA Button - Desktop */}
           <button className="hidden lg:flex items-center gap-2 bg-[#FFC439] hover:bg-yellow-500 text-black font-semibold px-6 py-3 rounded-full transition-colors duration-300">
-            <FiMessageCircle size={18} />
+            <FiMessageCircle size={18} className="text-white" />
             Ask the Gatekeeper
           </button>
 
