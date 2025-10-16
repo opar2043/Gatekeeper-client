@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FaCashRegister,
   FaDesktop,
@@ -18,6 +18,8 @@ import {
 import { motion } from "framer-motion";
 
 export default function LandingFull() {
+  const [activeBtn, setActiveBtn] = useState("order");
+
   const posCards = [
     {
       title: "RetailzPOS",
@@ -207,7 +209,7 @@ export default function LandingFull() {
         ))}
       </section>
 
-      {/* Premium Support Section */}
+      {/*  Premium Support Section (with glowing buttons) */}
       <motion.section
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -215,47 +217,63 @@ export default function LandingFull() {
         transition={{ duration: 0.7 }}
         className="max-w-6xl mx-auto px-6 mt-16"
       >
-        <div className="bg-white rounded-2xl shadow-lg p-10">
-          <h3 className="text-center text-xl font-bold text-slate-800">
+        <div className="bg-white rounded-2xl shadow-lg p-10 text-center">
+          <h3 className="text-xl md:text-2xl font-bold text-slate-800 mb-10">
             Every System Includes Premium Support
           </h3>
-          <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 flex-1">
-              {supportItems.map((s) => (
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  key={s.title}
-                  className="text-center"
-                >
-                  <div className="text-2xl mb-2 text-blue-700 mx-auto">
-                    {s.icon}
-                  </div>
-                  <div className="text-sm font-semibold">{s.title}</div>
-                  <div className="text-xs text-slate-500">{s.desc}</div>
-                </motion.div>
-              ))}
-            </div>
-            <div className="flex gap-3">
-              <motion.button
-                whileTap={{ scale: 0.9 }}
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 justify-items-center mb-10">
+            {supportItems.map((s) => (
+              <motion.div
+                key={s.title}
                 whileHover={{ scale: 1.05 }}
-                className="bg-blue-700 hover:bg-blue-800 text-white px-5 py-2 rounded-full shadow-md"
+                className="flex flex-col items-center text-center max-w-[150px]"
               >
-                Order Equipment
-              </motion.button>
-              <motion.button
-                whileTap={{ scale: 0.9 }}
-                whileHover={{ scale: 1.05 }}
-                className="border border-blue-700 text-blue-700 px-5 py-2 rounded-full"
-              >
-                Get a Quote
-              </motion.button>
-            </div>
+                <div className="text-3xl mb-3 text-blue-700">{s.icon}</div>
+                <div className="text-sm font-semibold">{s.title}</div>
+                <div className="text-xs text-slate-500 mt-1">{s.desc}</div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Buttons with glow */}
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              whileHover={{ scale: 1.05 }}
+              onClick={() => setActiveBtn("order")}
+              className={`relative px-6 py-2.5 rounded-full font-semibold transition-all duration-300 ${
+                activeBtn === "order"
+                  ? "text-white bg-blue-700 shadow-[0_0_15px_3px_rgba(37,99,235,0.6)]"
+                  : "border border-blue-700 text-blue-700 hover:bg-blue-700 hover:text-white"
+              }`}
+            >
+              {activeBtn === "order" && (
+                <span className="absolute inset-0 rounded-full border-2 border-blue-400 blur-sm animate-pulse"></span>
+              )}
+              <span className="relative z-10">Order Equipment</span>
+            </motion.button>
+
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              whileHover={{ scale: 1.05 }}
+              onClick={() => setActiveBtn("quote")}
+              className={`relative px-6 py-2.5 rounded-full font-semibold transition-all duration-300 ${
+                activeBtn === "quote"
+                  ? "text-white bg-blue-700 shadow-[0_0_15px_3px_rgba(37,99,235,0.6)]"
+                  : "border border-blue-700 text-blue-700 hover:bg-blue-700 hover:text-white"
+              }`}
+            >
+              {activeBtn === "quote" && (
+                <span className="absolute inset-0 rounded-full border-2 border-blue-400 blur-sm animate-pulse"></span>
+              )}
+              <span className="relative z-10">Get a Quote</span>
+            </motion.button>
           </div>
         </div>
       </motion.section>
 
-      {/* Blue CTA */}
+      {/* Blue CTA Section */}
       <motion.section
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
