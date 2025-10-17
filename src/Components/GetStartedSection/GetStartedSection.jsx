@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 export default function GetStartedSection() {
   return (
-    <section className="bg-blue-900 text-white py-28">
+    <section className="bg-[#0057A6] text-white py-28">
       <div className="max-w-5xl mx-auto text-center px-6 font-[Inter]">
         {/* Title */}
         <motion.h2
@@ -44,7 +44,7 @@ export default function GetStartedSection() {
             }}
             whileTap={{ scale: 0.96 }}
             onClick={() => alert("Merchant application clicked!")}
-            className="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-10 py-3.5 rounded-full transition-all duration-300"
+            className="bg-[#003aa6] hover:bg-blue-800 text-white font-semibold px-10 py-3.5 rounded-full transition-all duration-300"
           >
             Apply as Merchant
           </motion.button>

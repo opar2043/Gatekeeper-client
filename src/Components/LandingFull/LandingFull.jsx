@@ -165,7 +165,7 @@ export default function LandingFull() {
             whileHover={{ y: -6 }}
             className="rounded-2xl shadow-lg overflow-hidden bg-white transition-transform duration-300"
           >
-            <div className="bg-gradient-to-br from-[#2b65ff] to-[#2338c2] text-white text-center py-8 px-6">
+            <div className="bg-gradient-to-br from-[#0057A6] to-[#2338c2] text-white text-center py-8 px-6">
               <div className="flex flex-col items-center">
                 <div className="w-14 h-14 bg-white/10 rounded-md flex items-center justify-center mb-4">
                   {c.icon}
