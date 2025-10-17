@@ -13,32 +13,32 @@ import {
 export default function JoinGatekeeper() {
   const leftItems = [
     {
-      icon: <FaRobot className="text-indigo-600" size={22} />,
+      icon: <FaRobot className="text-[#0057A6]" size={22} />,
       title: "AI Training Chatbot",
       desc: "24/7 access to “Ask the Gatekeeper” for instant answers, troubleshooting, and sales guidance.",
     },
     {
-      icon: <FaGraduationCap className="text-indigo-600" size={22} />,
+      icon: <FaGraduationCap className="text-[#0057A6]" size={22} />,
       title: "Comprehensive Training",
       desc: "Step-by-step equipment guides, sales scripts, and complete onboarding programs.",
     },
     {
-      icon: <FaUserFriends className="text-indigo-600" size={22} />,
+      icon: <FaUserFriends className="text-[#0057A6]" size={22} />,
       title: "Personal Mentorship",
       desc: "One-on-one support from experienced professionals and a collaborative team environment.",
     },
     {
-      icon: <FaMoneyBillWave className="text-indigo-600" size={22} />,
+      icon: <FaMoneyBillWave className="text-[#0057A6]" size={22} />,
       title: "Residual Income",
       desc: "Build long-term wealth with ongoing commissions and recurring revenue streams.",
     },
     {
-      icon: <FaTag className="text-indigo-600" size={22} />,
+      icon: <FaTag className="text-[#0057A6]" size={22} />,
       title: "White-Label Options",
       desc: "Build your own brand while leveraging our infrastructure and support systems.",
     },
     {
-      icon: <FaBoxes className="text-indigo-600" size={22} />,
+      icon: <FaBoxes className="text-[#0057A6]" size={22} />,
       title: "Full Product Training",
       desc: "Master RetailzPOS, P-TECH, Clover, Valor, PAX, FD150, and all merchant services.",
     },
@@ -134,7 +134,7 @@ export default function JoinGatekeeper() {
               <motion.button
                 whileTap={{ scale: 0.97 }}
                 whileHover={{ scale: 1.05 }}
-                className="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-semibold px-7 py-3 rounded-full shadow-md transition-all duration-300"
+                className="bg-gradient-to-r from-[#0057A6] to-[#0056a6d8] hover:from-[#015fb8] hover:to-[#1d60dd] text-white font-semibold px-7 py-3 rounded-full shadow-md transition-all duration-300"
               >
                 Apply to Join
               </motion.button>
