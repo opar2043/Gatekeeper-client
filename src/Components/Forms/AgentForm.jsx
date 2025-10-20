@@ -467,7 +467,7 @@ const AgentForm = () => {
                 transition={{ delay: 0.55 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full bg-[#0070BA] text-white font-semibold py-3 rounded-full hover:bg-[#033196] active:bg-blue-800 transition-colors shadow-md duration-200"
+                className="w-full bg-[#0070BA] text-white font-semibold py-3 rounded-full hover:bg-[#0438a8] active:bg-blue-800 transition-colors shadow-md duration-200"
               >
                 Submit Application
               </motion.button>
