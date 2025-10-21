@@ -49,6 +49,14 @@ const AgentForm = () => {
     }
   };
 
+
+  function handleSubmit(){
+    // Placeholder for form submission logic
+
+
+  }
+  
+
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
       {/* Header */}
@@ -142,6 +150,7 @@ const AgentForm = () => {
                   </label>
                   <input
                     type="text"
+                    name="business"
                     placeholder="Enter your business name"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
@@ -156,6 +165,7 @@ const AgentForm = () => {
                   </label>
                   <input
                     type="text"
+                    name="diffrent_business"
                     placeholder="If different from business name"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
@@ -174,6 +184,7 @@ const AgentForm = () => {
                 </label>
                 <input
                   type="text"
+                  name="city"
                   placeholder="Street address, city, state, zip"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
@@ -191,6 +202,7 @@ const AgentForm = () => {
                   </label>
                   <input
                     type="tel"
+                    name="mobile"
                     placeholder="(555) 123-4567"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
@@ -205,6 +217,7 @@ const AgentForm = () => {
                   </label>
                   <input
                     type="email"
+                    name="gmail"
                     placeholder="your@email.com"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
@@ -223,6 +236,7 @@ const AgentForm = () => {
                 </label>
                 <input
                   type="text"
+                  name="taxId"
                   placeholder="12-3456789"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
@@ -317,6 +331,7 @@ const AgentForm = () => {
                   </label>
                   <input
                     type="text"
+                    name="fristname"
                     placeholder="Enter your first name"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
@@ -331,6 +346,7 @@ const AgentForm = () => {
                   </label>
                   <input
                     type="text"
+                    name="lastname"
                     placeholder="Enter your last name"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
@@ -349,6 +365,7 @@ const AgentForm = () => {
                   </label>
                   <input
                     type="email"
+                    name="email"
                     placeholder="your@email.com"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
@@ -362,7 +379,8 @@ const AgentForm = () => {
                     Phone Number <span className="text-red-500">*</span>
                   </label>
                   <input
-                    type="tel"
+                    type="text"
+                    name="phone"
                     placeholder="(555) 123-4567"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
@@ -381,6 +399,7 @@ const AgentForm = () => {
                   </label>
                   <input
                     type="text"
+                    name="city"
                     placeholder="Enter your city"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
@@ -395,6 +414,7 @@ const AgentForm = () => {
                   </label>
                   <input
                     type="text"
+                    name="state"
                     placeholder="Enter your state"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
@@ -414,6 +434,7 @@ const AgentForm = () => {
                 </label>
                 <textarea
                   rows={4}
+                  name="description"
                   placeholder="Share your motivation..."
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 ></textarea>
@@ -431,6 +452,7 @@ const AgentForm = () => {
                 </label>
                 <textarea
                   rows={3}
+                  name="exprience"
                   placeholder="Describe your previous experience (optional)"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 ></textarea>
