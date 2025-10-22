@@ -1,11 +1,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiOutlineDocumentText } from "react-icons/hi";
-import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
-
 const AgentForm = () => {
   const [activeTab, setActiveTab] = useState("merchant");
-
   const headerVariants = {
     hidden: { opacity: 0, y: -30 },
     visible: {
@@ -17,7 +14,6 @@ const AgentForm = () => {
       }
     }
   };
-
   const tabVariants = {
     hidden: { opacity: 0, scale: 0.8 },
     visible: {
@@ -49,13 +45,190 @@ const AgentForm = () => {
     }
   };
 
+//  async function handleSubmit(e) {
+//     e.preventDefault();
+//     const frm = e.target;
 
-  function handleSubmit(){
-    // Placeholder for form submission logic
+//     // Conditional logic
+//     if (activeTab === "merchant") {
+//       const business = frm.business.value;
+//       const diffrent_business = frm.diffrent_business.value;
+//       const city = frm.city.value;
+//       const mobile = frm.mobile.value;
+//       const gmail = frm.gmail.value;
+//       const taxId = frm.taxId.value;
+
+//       const merchantData = {
+//         business,
+//         diffrent_business,
+//         city,
+//         mobile,
+//         gmail,
+//         taxId,
+//         type: "merchant",
+//       };
+
+//       console.log("Merchant Data:", merchantData);
+//       // 👉 You can now send to Google Sheets API here using fetch()
+//     } 
+    
+//     else if (activeTab === "agent") {
+//       const fristname = frm.fristname.value;
+//       const lastname = frm.lastname.value;
+//       const email = frm.email.value;
+//       const phone = frm.phone.value;
+//       const city = frm.city.value;
+//       const state = frm.state.value;
+//       const description = frm.description.value;
+//       const exprience = frm.exprience.value;
+
+//       const agentData = {
+//         fristname,
+//         lastname,
+//         email,
+//         phone,
+//         city,
+//         state,
+//         description,
+//         exprience,
+//         type: "agent",
+//       };
+
+//       console.log("Agent Data:", agentData);
+      
+//       // 👉 Send to Google Sheets API here
+//     }
 
 
+
+//     const res = await fetch('https://v1.nocodeapi.com/opar2043/google_sheets/reTOfqBOpGydPNBD?tabId=Sheet1',{
+//       method:'POST',
+//       headers:{
+//         'Content-Type':'application/json'
+//       },
+//       body:JSON.stringify({
+//         data:[
+//           activeTab === "merchant" ? [
+//             frm.business.value,
+//             frm.diffrent_business.value, ]   
+//     })
+
+
+//     // frm.reset(); // optional - uncomment to clear form after submit
+//   }
+
+
+async function handleSubmit(e) {
+  e.preventDefault();
+  const frm = e.target;
+
+  // Merchant
+  if (activeTab === "merchant") {
+    const business = frm.business.value;
+    const diffrent_business = frm.diffrent_business.value;
+    const city = frm.city.value;
+    const mobile = frm.mobile.value;
+    const gmail = frm.gmail.value;
+    const taxId = frm.taxId.value;
+
+    const merchantData = {
+      business,
+      diffrent_business,
+      city,
+      mobile,
+      gmail,
+      taxId,
+      type: "merchant",
+    };
+    console.log("Merchant Data:", merchantData);
+
+    // ✅ Send to Google Sheet via NoCodeAPI
+    const res = await fetch(
+      "https://v1.nocodeapi.com/opar2043/google_sheets/reTOfqBOpGydPNBD?tabId=Sheet1",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data: [
+            [
+              business,
+              diffrent_business,
+              city,
+              mobile,
+              gmail,
+              taxId,
+              "Merchant",
+            ],
+          ],
+        }),
+      }
+    );
+
+    const json = await res.json();
+    console.log("✅ Merchant submitted:", json);
+    // alert("Merchant data added successfully!");
   }
-  
+
+  // Agent
+  else if (activeTab === "agent") {
+    const fristname = frm.fristname.value;
+    const lastname = frm.lastname.value;
+    const email = frm.email.value;
+    const phone = frm.phone.value;
+    const city = frm.city.value;
+    const state = frm.state.value;
+    const description = frm.description.value;
+    const exprience = frm.exprience.value;
+
+    const agentData = {
+      fristname,
+      lastname,
+      email,
+      phone,
+      city,
+      state,
+      description,
+      exprience,
+      type: "agent",
+    };
+    console.log("Agent Data:", agentData);
+
+    // ✅ Send to Google Sheet via NoCodeAPI
+    const res = await fetch(
+      "https://v1.nocodeapi.com/opar2043/google_sheets/reTOfqBOpGydPNBD?tabId=Sheet1",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data: [
+            [
+              fristname,
+              lastname,
+              email,
+              phone,
+              city,
+              state,
+              description,
+              exprience,
+              "Agent",
+            ],
+          ],
+        }),
+      }
+    );
+
+    const json = await res.json();
+    console.log("✅ Agent submitted:", json);
+    alert("Agent data added successfully!");
+  }
+
+  frm.reset(); 
+}
+
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
@@ -126,7 +299,8 @@ const AgentForm = () => {
         <AnimatePresence mode="wait">
           {/* ================== Merchant Form ================== */}
           {activeTab === "merchant" && (
-            <motion.div
+            <motion.form
+              onSubmit={handleSubmit}
               key="merchant"
               variants={formVariants}
               initial="hidden"
@@ -152,6 +326,7 @@ const AgentForm = () => {
                     type="text"
                     name="business"
                     placeholder="Enter your business name"
+                    required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </motion.div>
@@ -186,6 +361,7 @@ const AgentForm = () => {
                   type="text"
                   name="city"
                   placeholder="Street address, city, state, zip"
+                  required
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
               </motion.div>
@@ -204,6 +380,7 @@ const AgentForm = () => {
                     type="tel"
                     name="mobile"
                     placeholder="(555) 123-4567"
+                    required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </motion.div>
@@ -219,6 +396,7 @@ const AgentForm = () => {
                     type="email"
                     name="gmail"
                     placeholder="your@email.com"
+                    required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </motion.div>
@@ -298,17 +476,19 @@ const AgentForm = () => {
                 transition={{ delay: 0.55 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                type="submit"
                 className="w-full bg-blue-600 text-white font-semibold py-3 rounded-full hover:bg-blue-700 active:bg-blue-800 transition-colors shadow-md"
               >
                 Submit Application
               </motion.button>
-            </motion.div>
+            </motion.form>
           )}
 
           {/* ================== Agent Form ================== */}
           {activeTab === "agent" && (
-            <motion.div
+            <motion.form
               key="agent"
+              onSubmit={handleSubmit}
               variants={formVariants}
               initial="hidden"
               animate="visible"
@@ -333,6 +513,7 @@ const AgentForm = () => {
                     type="text"
                     name="fristname"
                     placeholder="Enter your first name"
+                    required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </motion.div>
@@ -348,6 +529,7 @@ const AgentForm = () => {
                     type="text"
                     name="lastname"
                     placeholder="Enter your last name"
+                    required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </motion.div>
@@ -367,6 +549,7 @@ const AgentForm = () => {
                     type="email"
                     name="email"
                     placeholder="your@email.com"
+                    required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </motion.div>
@@ -382,6 +565,7 @@ const AgentForm = () => {
                     type="text"
                     name="phone"
                     placeholder="(555) 123-4567"
+                    required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </motion.div>
@@ -401,6 +585,7 @@ const AgentForm = () => {
                     type="text"
                     name="city"
                     placeholder="Enter your city"
+                    required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </motion.div>
@@ -416,6 +601,7 @@ const AgentForm = () => {
                     type="text"
                     name="state"
                     placeholder="Enter your state"
+                    required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </motion.div>
@@ -436,6 +622,7 @@ const AgentForm = () => {
                   rows={4}
                   name="description"
                   placeholder="Share your motivation..."
+                  required
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 ></textarea>
               </motion.div>
@@ -489,11 +676,12 @@ const AgentForm = () => {
                 transition={{ delay: 0.55 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                type="submit"
                 className="w-full bg-[#0070BA] text-white font-semibold py-3 rounded-full hover:bg-[#0438a8] active:bg-blue-800 transition-colors shadow-md duration-200"
               >
                 Submit Application
               </motion.button>
-            </motion.div>
+            </motion.form>
           )}
         </AnimatePresence>
       </div>
