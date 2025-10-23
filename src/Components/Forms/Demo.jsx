@@ -2,50 +2,47 @@ import React, { useState } from "react";
 
 const Demo = () => {
 // https://script.google.com/macros/s/AKfycbwEn34mGBpqdjtY4xNT2rmXHGTSPzrynrPvsPJgFhLPCeDj9sthYlDtfyRsnH5Vrw850A/exec
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    mobile: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     const Name = e.target.name.value;
-//     const Email = e.target.email.value;
-//     const mobile = e.target.mobile.value;
-
-//     const data = {
-//         Name,
-//         Email,
-//         mobile
-//     }
 
 
-//         const res = await fetch(
-//       "https://script.google.com/macros/s/AKfycbwEn34mGBpqdjtY4xNT2rmXHGTSPzrynrPvsPJgFhLPCeDj9sthYlDtfyRsnH5Vrw850A/exec",
-//       {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({
-//           data: [
-//             [
-//                data
-//             ],
-//           ],
-//         }),
-//       }
-//     );
+function doPost(e) {
+  const sheet = SpreadsheetApp.openByUrl(
+    "https://docs.google.com/spreadsheets/d/1gEbbq2NNPzAd9ex8OJO20Li1YFXCvkOnC5Q9EuzMV3Y/edit#gid=0"
+  ).getSheetByName("Sheet1");
 
-//     console.log("Form Data:",data );
-//   };
+  const data = e.parameter;
+  const category = data.category || "Unknown";
 
+  if (category === "merchant") {
+    // Append merchant data
+    sheet.appendRow([
+      "Merchant",
+      data.business,
+      data.diffrent_business,
+      data.city,
+      data.mobile,
+      data.gmail,
+      data.taxId,
+      new Date(),
+    ]);
+  } else if (category === "agent") {
+    // Append agent data
+    sheet.appendRow([
+      "Agent",
+      data.fristname,
+      data.lastname,
+      data.email,
+      data.phone,
+      data.city,
+      data.state,
+      data.description,
+      data.exprience,
+      new Date(),
+    ]);
+  } else {
+    sheet.appendRow(["Unknown", JSON.stringify(data), new Date()]);
+  }
+
+  return ContentService.createTextOutput("Added successfully!");
 
 
   const handleSubmit = (e)=>{
@@ -55,7 +52,6 @@ const Demo = () => {
       method:"POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body:(`Name=${e.target.name.value}&Email=${e.target.email.value}&mobile=${e.target.mobile.value}`)
-    // body: (`name=${e.target.name.value}&email=${e.target.email.value}&mobile=${e.target.mobile.value}`)
 
     }).then(res=>res.text()).then(data=>{
       alert(data)
@@ -77,8 +73,7 @@ const Demo = () => {
           <input
             type="text"
             name="name"
-            value={formData.name}
-            onChange={handleChange}
+
             className="w-full border border-gray-300 p-2 rounded"
             placeholder="Enter your name"
             required
@@ -90,8 +85,7 @@ const Demo = () => {
           <input
             type="email"
             name="email"
-            value={formData.email}
-            onChange={handleChange}
+
             className="w-full border border-gray-300 p-2 rounded"
             placeholder="Enter your email"
             required
@@ -103,8 +97,7 @@ const Demo = () => {
           <input
             type="tel"
             name="mobile"
-            value={formData.mobile}
-            onChange={handleChange}
+
             className="w-full border border-gray-300 p-2 rounded"
             placeholder="Enter your mobile number"
             required

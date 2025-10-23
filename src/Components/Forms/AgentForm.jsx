@@ -10,9 +10,9 @@ const AgentForm = () => {
       y: 0,
       transition: {
         duration: 0.8,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
   const tabVariants = {
     hidden: { opacity: 0, scale: 0.8 },
@@ -21,9 +21,9 @@ const AgentForm = () => {
       scale: 1,
       transition: {
         duration: 0.5,
-        ease: "backOut"
-      }
-    }
+        ease: "backOut",
+      },
+    },
   };
 
   const formVariants = {
@@ -33,202 +33,48 @@ const AgentForm = () => {
       x: 0,
       transition: {
         duration: 0.5,
-        ease: "easeOut"
-      }
+        ease: "easeOut",
+      },
     },
     exit: {
       opacity: 0,
       x: activeTab === "merchant" ? 50 : -50,
       transition: {
-        duration: 0.3
-      }
-    }
+        duration: 0.3,
+      },
+    },
   };
 
-//  async function handleSubmit(e) {
-//     e.preventDefault();
-//     const frm = e.target;
-
-//     // Conditional logic
-//     if (activeTab === "merchant") {
-//       const business = frm.business.value;
-//       const diffrent_business = frm.diffrent_business.value;
-//       const city = frm.city.value;
-//       const mobile = frm.mobile.value;
-//       const gmail = frm.gmail.value;
-//       const taxId = frm.taxId.value;
-
-//       const merchantData = {
-//         business,
-//         diffrent_business,
-//         city,
-//         mobile,
-//         gmail,
-//         taxId,
-//         type: "merchant",
-//       };
-
-//       console.log("Merchant Data:", merchantData);
-//       // 👉 You can now send to Google Sheets API here using fetch()
-//     } 
-    
-//     else if (activeTab === "agent") {
-//       const fristname = frm.fristname.value;
-//       const lastname = frm.lastname.value;
-//       const email = frm.email.value;
-//       const phone = frm.phone.value;
-//       const city = frm.city.value;
-//       const state = frm.state.value;
-//       const description = frm.description.value;
-//       const exprience = frm.exprience.value;
-
-//       const agentData = {
-//         fristname,
-//         lastname,
-//         email,
-//         phone,
-//         city,
-//         state,
-//         description,
-//         exprience,
-//         type: "agent",
-//       };
-
-//       console.log("Agent Data:", agentData);
-      
-//       // 👉 Send to Google Sheets API here
-//     }
 
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const frm = e.target;
 
-//     const res = await fetch('https://v1.nocodeapi.com/opar2043/google_sheets/reTOfqBOpGydPNBD?tabId=Sheet1',{
-//       method:'POST',
-//       headers:{
-//         'Content-Type':'application/json'
-//       },
-//       body:JSON.stringify({
-//         data:[
-//           activeTab === "merchant" ? [
-//             frm.business.value,
-//             frm.diffrent_business.value, ]   
-//     })
+    const scriptURL =
+      "https://script.google.com/macros/s/AKfycbw5p0zAOtzcL2U-SgdsB-40EIPqT-7Ae3FCU55lnA8C9Zpzjt5dlHyGsUXtBncOmKi8JQ/exec";
 
-
-//     // frm.reset(); // optional - uncomment to clear form after submit
-//   }
-
-
-async function handleSubmit(e) {
-  e.preventDefault();
-  const frm = e.target;
-
-  // Merchant
-  if (activeTab === "merchant") {
-    const business = frm.business.value;
-    const diffrent_business = frm.diffrent_business.value;
-    const city = frm.city.value;
-    const mobile = frm.mobile.value;
-    const gmail = frm.gmail.value;
-    const taxId = frm.taxId.value;
-
-    const merchantData = {
-      business,
-      diffrent_business,
-      city,
-      mobile,
-      gmail,
-      taxId,
-      type: "merchant",
-    };
-    console.log("Merchant Data:", merchantData);
-
-    // ✅ Send to Google Sheet via NoCodeAPI
-    const res = await fetch(
-      "https://v1.nocodeapi.com/opar2043/google_sheets/reTOfqBOpGydPNBD?tabId=Sheet1",
-      {
+    if (activeTab === "merchant") {
+      fetch(scriptURL, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          data: [
-            [
-              business,
-              diffrent_business,
-              city,
-              mobile,
-              gmail,
-              taxId,
-              "Merchant",
-            ],
-          ],
-        }),
-      }
-    );
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `category=merchant&business=${frm.business.value}&diffrent_business=${frm.diffrent_business.value}&city=${frm.city.value}&mobile=${frm.mobile.value}&gmail=${frm.gmail.value}&taxId=${frm.taxId.value}`,
+      })
+        .then((res) => res.text())
+        .then((data) => alert("Merchant added successfully!"))
+        .catch((err) => console.error("Error:", err));
 
-    const json = await res.json();
-    console.log("✅ Merchant submitted:", json);
-    // alert("Merchant data added successfully!");
-  }
-
-  // Agent
-  else if (activeTab === "agent") {
-    const fristname = frm.fristname.value;
-    const lastname = frm.lastname.value;
-    const email = frm.email.value;
-    const phone = frm.phone.value;
-    const city = frm.city.value;
-    const state = frm.state.value;
-    const description = frm.description.value;
-    const exprience = frm.exprience.value;
-
-    const agentData = {
-      fristname,
-      lastname,
-      email,
-      phone,
-      city,
-      state,
-      description,
-      exprience,
-      type: "agent",
-    };
-    console.log("Agent Data:", agentData);
-
-    // ✅ Send to Google Sheet via NoCodeAPI
-    const res = await fetch(
-      "https://v1.nocodeapi.com/opar2043/google_sheets/reTOfqBOpGydPNBD?tabId=Sheet1",
-      {
+    } else {
+      fetch(scriptURL, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          data: [
-            [
-              fristname,
-              lastname,
-              email,
-              phone,
-              city,
-              state,
-              description,
-              exprience,
-              "Agent",
-            ],
-          ],
-        }),
-      }
-    );
-
-    const json = await res.json();
-    console.log("✅ Agent submitted:", json);
-    alert("Agent data added successfully!");
-  }
-
-  frm.reset(); 
-}
-
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `category=agent&fristname=${frm.fristname.value}&lastname=${frm.lastname.value}&email=${frm.email.value}&phone=${frm.phone.value}&city=${frm.city.value}&state=${frm.state.value}&description=${frm.description.value}&exprience=${frm.exprience.value}`,
+      })
+        .then((res) => res.text())
+        .then((data) => alert("Agent added successfully!"))
+        .catch((err) => console.error("Error:", err));
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
