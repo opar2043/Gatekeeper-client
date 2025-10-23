@@ -131,7 +131,7 @@ export default function LandingFull() {
   };
 
   return (
-    <div className="bg-slate-50 text-slate-900">
+    <div id="equipment" className="bg-slate-50 text-slate-900">
       {/* === Hero Section === */}
       <section className="max-w-6xl mx-auto px-6 text-center py-10">
         <motion.h1

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiOutlineDocumentText } from "react-icons/hi";
+import Swal from "sweetalert2";
 const AgentForm = () => {
   const [activeTab, setActiveTab] = useState("merchant");
   const headerVariants = {
@@ -45,25 +46,30 @@ const AgentForm = () => {
     },
   };
 
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const frm = e.target;
 
     const scriptURL =
-      "https://script.google.com/macros/s/AKfycbw5p0zAOtzcL2U-SgdsB-40EIPqT-7Ae3FCU55lnA8C9Zpzjt5dlHyGsUXtBncOmKi8JQ/exec";
+      "https://script.google.com/macros/s/AKfycbxLH79uKzLDCWq7PxE0wtBQaXSqAAVsuPy-XuVcUohpJG6YzHzVRuyDTwA78IiSmGRj/exec";
 
     if (activeTab === "merchant") {
       fetch(scriptURL, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: `category=merchant&business=${frm.business.value}&diffrent_business=${frm.diffrent_business.value}&city=${frm.city.value}&mobile=${frm.mobile.value}&gmail=${frm.gmail.value}&taxId=${frm.taxId.value}`,
+        body: `category=merchant&business=${frm.business.value}&diffrent_business=${frm.diffrent_business.value}&city=${frm.city.value}&bank_name=${frm.bank_name.value}&mobile=${frm.mobile.value}&gmail=${frm.gmail.value}&taxId=${frm.taxId.value}`,
       })
         .then((res) => res.text())
-        .then((data) => alert("Merchant added successfully!"))
+        .then((data) =>
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Marchent Form Submitted Successfully",
+            showConfirmButton: false,
+            timer: 1200,
+          })
+        )
         .catch((err) => console.error("Error:", err));
-
     } else {
       fetch(scriptURL, {
         method: "POST",
@@ -71,13 +77,23 @@ const AgentForm = () => {
         body: `category=agent&fristname=${frm.fristname.value}&lastname=${frm.lastname.value}&email=${frm.email.value}&phone=${frm.phone.value}&city=${frm.city.value}&state=${frm.state.value}&description=${frm.description.value}&exprience=${frm.exprience.value}`,
       })
         .then((res) => res.text())
-        .then((data) => alert("Agent added successfully!"))
+        .then((data) =>
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Agent Form Submitted Successfully",
+            showConfirmButton: false,
+            timer: 1200,
+          })
+        )
         .catch((err) => console.error("Error:", err));
     }
+
+    frm.reset();
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+    <div id="agents" className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
       {/* Header */}
       <motion.div
         variants={headerVariants}
@@ -193,24 +209,45 @@ const AgentForm = () => {
                 </motion.div>
               </div>
 
-              {/* Business Address */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="mb-6"
-              >
-                <label className="block font-semibold text-gray-800 mb-2">
-                  Business Address <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="city"
-                  placeholder="Street address, city, state, zip"
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                />
-              </motion.div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Business Address */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="mb-6"
+                >
+                  <label className="block font-semibold text-gray-800 mb-2">
+                    Business Address <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="city"
+                    placeholder="Street address, city, state, zip"
+                    required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  />
+                </motion.div>
+
+                {/* Bank name */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="mb-6"
+                >
+                  <label className="block font-semibold text-gray-800 mb-2">
+                    Bank Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="bank_name"
+                    placeholder="Type your bank name"
+                    required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  />
+                </motion.div>
+              </div>
 
               {/* Phone + Email */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -220,7 +257,7 @@ const AgentForm = () => {
                   transition={{ delay: 0.25 }}
                 >
                   <label className="block font-semibold text-gray-800 mb-2">
-                    Phone Number <span className="text-red-500">*</span>
+                    Mobile (Business) <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="tel"
@@ -265,55 +302,6 @@ const AgentForm = () => {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
               </motion.div>
-
-              {/* Upload Documents */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="mb-6"
-              >
-                <label className="block font-semibold text-gray-800 mb-2">
-                  Upload SS-4 Form (if available)
-                </label>
-                <motion.div
-                  whileHover={{ scale: 1.02, borderColor: "#60a5fa" }}
-                  className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 hover:bg-blue-50 transition-all cursor-pointer"
-                >
-                  <HiOutlineDocumentText className="mx-auto text-4xl text-gray-400 mb-2" />
-                  <p className="text-gray-600 font-medium mb-1">
-                    Click to upload or drag and drop
-                  </p>
-                  <p className="text-gray-400 text-sm">
-                    PDF, DOC, DOCX (max 10MB)
-                  </p>
-                </motion.div>
-              </motion.div>
-
-              {/* License + Check */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                {["Business License", "Voided Check"].map((label, idx) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.45 + idx * 0.05 }}
-                  >
-                    <label className="block font-semibold text-gray-800 mb-2">
-                      {label}
-                    </label>
-                    <motion.div
-                      whileHover={{ scale: 1.02, borderColor: "#60a5fa" }}
-                      className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 hover:bg-blue-50 transition-all cursor-pointer"
-                    >
-                      <HiOutlineDocumentText className="mx-auto text-3xl text-gray-400 mb-2" />
-                      <p className="text-gray-600 font-medium text-sm">
-                        Upload {label}
-                      </p>
-                    </motion.div>
-                  </motion.div>
-                ))}
-              </div>
 
               {/* Submit */}
               <motion.button
@@ -405,7 +393,7 @@ const AgentForm = () => {
                   transition={{ delay: 0.25 }}
                 >
                   <label className="block font-semibold text-gray-800 mb-2">
-                    Phone Number <span className="text-red-500">*</span>
+                    Mobile (Whatsapp) <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -492,7 +480,7 @@ const AgentForm = () => {
               </motion.div>
 
               {/* Resume Upload */}
-              <motion.div
+              {/* <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
@@ -513,7 +501,7 @@ const AgentForm = () => {
                     PDF, DOC, DOCX (max 10MB)
                   </p>
                 </motion.div>
-              </motion.div>
+              </motion.div> */}
 
               {/* Submit */}
               <motion.button

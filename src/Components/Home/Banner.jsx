@@ -1,4 +1,9 @@
-import { FaCheckCircle, FaHeadset, FaDollarSign, FaCalendarAlt } from "react-icons/fa";
+import {
+  FaCheckCircle,
+  FaHeadset,
+  FaDollarSign,
+  FaCalendarAlt,
+} from "react-icons/fa";
 import { motion } from "framer-motion";
 
 const Banner = () => {
@@ -8,9 +13,9 @@ const Banner = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.2,
-        delayChildren: 0.3
-      }
-    }
+        delayChildren: 0.3,
+      },
+    },
   };
 
   const itemVariants = {
@@ -20,9 +25,9 @@ const Banner = () => {
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const statVariants = {
@@ -32,9 +37,9 @@ const Banner = () => {
       scale: 1,
       transition: {
         duration: 0.5,
-        ease: "backOut"
-      }
-    }
+        ease: "backOut",
+      },
+    },
   };
 
   const floatingAnimation = {
@@ -42,24 +47,27 @@ const Banner = () => {
     transition: {
       duration: 3,
       repeat: Infinity,
-      ease: "easeInOut"
-    }
+      ease: "easeInOut",
+    },
   };
 
   return (
-    <section className="bg-gradient-to-br from-[#0057A6] via-[#0066BB] to-[#003087] mt-28 relative overflow-hidden">
+    <section
+      id="home"
+      className="bg-gradient-to-br from-[#0057A6] via-[#0066BB] to-[#003087] mt-28 relative overflow-hidden"
+    >
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
           animate={{
             scale: [1, 1.2, 1],
             rotate: [0, 90, 0],
-            opacity: [0.05, 0.1, 0.05]
+            opacity: [0.05, 0.1, 0.05],
           }}
           transition={{
             duration: 20,
             repeat: Infinity,
-            ease: "linear"
+            ease: "linear",
           }}
           className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"
         />
@@ -67,12 +75,12 @@ const Banner = () => {
           animate={{
             scale: [1, 1.3, 1],
             rotate: [0, -90, 0],
-            opacity: [0.03, 0.08, 0.03]
+            opacity: [0.03, 0.08, 0.03],
           }}
           transition={{
             duration: 25,
             repeat: Infinity,
-            ease: "linear"
+            ease: "linear",
           }}
           className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-white rounded-full blur-3xl"
         />
@@ -103,31 +111,39 @@ const Banner = () => {
             </span>{" "}
             Between Merchants and Merchant Services
           </motion.h1>
-          
+
           <motion.p
             variants={itemVariants}
             className="text-lg md:text-xl leading-relaxed mb-8 text-white/90"
           >
-            Protecting merchants, simplifying payments, and training agents to succeed — the right way. Experience personalized support with every account handled from setup to success.
+            Protecting merchants, simplifying payments, and training agents to
+            succeed — the right way. Experience personalized support with every
+            account handled from setup to success.
           </motion.p>
-          
+
           <motion.div
             variants={itemVariants}
             className="flex flex-col sm:flex-row gap-4"
           >
             <motion.button
-              whileHover={{ scale: 1.05, boxShadow: "0 10px 40px rgba(0,0,0,0.2)" }}
+              whileHover={{
+                scale: 1.05,
+                boxShadow: "0 10px 40px rgba(0,0,0,0.2)",
+              }}
               whileTap={{ scale: 0.95 }}
               className="bg-white text-[#0057A6] px-8 py-4 rounded-full font-semibold text-md transition-all duration-300 shadow-xl hover:shadow-2xl"
             >
-              Get Started →
+              <a href="#agents">Get Started →</a>
             </motion.button>
             <motion.button
-              whileHover={{ scale: 1.05, boxShadow: "0 10px 40px rgba(255,255,255,0.2)" }}
+              whileHover={{
+                scale: 1.05,
+                boxShadow: "0 10px 40px rgba(255,255,255,0.2)",
+              }}
               whileTap={{ scale: 0.95 }}
               className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-md transition-all duration-300 hover:bg-white hover:text-[#0057A6]"
             >
-              Join the Team
+              <a href="#agents">Join the Team</a>
             </motion.button>
           </motion.div>
         </motion.div>
@@ -135,21 +151,21 @@ const Banner = () => {
         {/* Right Side - Stats Card */}
         <motion.div
           initial={{ opacity: 0, x: 50 }}
-          animate={{ 
-            opacity: 1, 
+          animate={{
+            opacity: 1,
             x: 0,
-            y: [0, -10, 0]
+            y: [0, -10, 0],
           }}
-          transition={{ 
+          transition={{
             opacity: { duration: 0.8, delay: 0.2 },
             x: { duration: 0.8, delay: 0.2 },
-            y: { duration: 3, repeat: Infinity, ease: "easeInOut" }
+            y: { duration: 3, repeat: Infinity, ease: "easeInOut" },
           }}
           className="bg-white rounded-3xl w-full md:w-4/5 shadow-2xl p-6 md:p-10 relative overflow-hidden"
         >
           {/* Decorative gradient overlay */}
           <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-[#0057A6]/10 to-transparent rounded-full blur-2xl" />
-          
+
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -158,14 +174,15 @@ const Banner = () => {
           >
             Trusted Payment Solutions
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.6 }}
             className="text-gray-600/80 text-md mb-10 leading-relaxed font-semibold relative z-10"
           >
-            Industry-leading POS systems, terminals, and merchant services with unmatched support.
+            Industry-leading POS systems, terminals, and merchant services with
+            unmatched support.
           </motion.p>
 
           {/* Stats Grid */}
@@ -190,7 +207,9 @@ const Banner = () => {
                 100%
               </motion.div>
               <div className="flex items-center justify-center gap-2 text-gray-600">
-                <span className="font-medium text-sm text-gray-500">Personalized Service</span>
+                <span className="font-medium text-sm text-gray-500">
+                  Personalized Service
+                </span>
               </div>
             </motion.div>
 
@@ -209,7 +228,9 @@ const Banner = () => {
                 24/7
               </motion.div>
               <div className="flex items-center justify-center gap-2 text-gray-600">
-                <span className="font-medium text-md text-gray-500">Support Available</span>
+                <span className="font-medium text-md text-gray-500">
+                  Support Available
+                </span>
               </div>
             </motion.div>
 
@@ -228,7 +249,9 @@ const Banner = () => {
                 0%
               </motion.div>
               <div className="flex items-center justify-center gap-2 text-gray-600">
-                <span className="font-medium text-md text-gray-500">Processing Fees*</span>
+                <span className="font-medium text-md text-gray-500">
+                  Processing Fees*
+                </span>
               </div>
             </motion.div>
 
@@ -247,7 +270,9 @@ const Banner = () => {
                 Next Day
               </motion.div>
               <div className="flex items-center justify-center gap-2 text-gray-600">
-                <span className="font-medium text-md text-gray-500">Funding</span>
+                <span className="font-medium text-md text-gray-500">
+                  Funding
+                </span>
               </div>
             </motion.div>
           </motion.div>

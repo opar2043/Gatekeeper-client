@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { FiMail, FiClock, FiMessageCircle, FiMenu, FiX, FiHome } from "react-icons/fi";
+import {
+  FiMail,
+  FiClock,
+  FiMessageCircle,
+  FiMenu,
+  FiX,
+  FiHome,
+} from "react-icons/fi";
 import { FaClock, FaPhoneAlt } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 
@@ -23,7 +30,9 @@ const Navbar = () => {
       {/* Upper Navbar (Blue - Hides on scroll) */}
       <div
         className={`bg-[#003087] text-white/90 px-4 md:px-8 transition-all duration-300 ${
-          isScrolled ? "h-0 overflow-hidden opacity-0" : "h-auto py-2 opacity-100"
+          isScrolled
+            ? "h-0 overflow-hidden opacity-0"
+            : "h-auto py-2 opacity-100"
         }`}
       >
         <div className="flex flex-wrap justify-center items-center gap-4 md:gap-7 text-xs font-bold md:text-sm py-1">
@@ -50,29 +59,31 @@ const Navbar = () => {
             <div className="w-10 h-10 bg-[#003DA5] rounded flex items-center justify-center">
               <FiHome className="text-white" size={24} />
             </div>
-            <span className="text-2xl font-bold text-[#003DA5]">GATEKEEPER</span>
+            <span className="text-2xl font-bold text-[#003DA5]">
+              GATEKEEPER
+            </span>
           </Link>
 
           {/* Navigation Links - Desktop */}
           <nav className="hidden lg:flex items-center gap-2">
-            <NavLink to="/" className={navLinkStyle}>
+            <a href="#home" className={navLinkStyle}>
               Home
-            </NavLink>
-            <NavLink to="/about" className={navLinkStyle}>
+            </a>
+            <a href="#about" className={navLinkStyle}>
               About
-            </NavLink>
-            <NavLink to="/equipment" className={navLinkStyle}>
+            </a>
+            <a href="#equipment" className={navLinkStyle}>
               Equipment
-            </NavLink>
-            <NavLink to="/free-processing" className={navLinkStyle}>
-              Free Processing
-            </NavLink>
-            <NavLink to="/agents" className={navLinkStyle}>
+            </a>
+            <a href="#forms" className={navLinkStyle}>
+              Forms
+            </a>
+            <a href="#agents" className={navLinkStyle}>
               Agents
-            </NavLink>
-            <NavLink to="/contact" className={navLinkStyle}>
+            </a>
+            <a href="#contact" className={navLinkStyle}>
               Contact
-            </NavLink>
+            </a>
           </nav>
 
           {/* CTA Button - Desktop */}
@@ -87,7 +98,7 @@ const Navbar = () => {
               <FiMessageCircle size={16} />
               Ask
             </button>
-            <button 
+            <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-[#003DA5]"
             >
@@ -97,51 +108,45 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu */}
+        {/* ✅ Mobile Menu */}
         {isMenuOpen && (
           <nav className="lg:hidden mt-4 pt-4 border-t border-gray-200">
             <div className="flex flex-col gap-2">
-              <NavLink 
-                to="/" 
+              <a
+                href="#home"
                 className="px-4 py-2 hover:bg-gray-100 rounded transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Home
-              </NavLink>
-              <NavLink 
-                to="/about" 
+              </a>
+              <a
+                href="#about"
                 className="px-4 py-2 hover:bg-gray-100 rounded transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 About
-              </NavLink>
-              <NavLink 
-                to="/equipment" 
+              </a>
+              <a
+                href="#equipment"
                 className="px-4 py-2 hover:bg-gray-100 rounded transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Equipment
-              </NavLink>
-              <NavLink 
-                to="/free-processing" 
-                className="px-4 py-2 hover:bg-gray-100 rounded transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Free Processing
-              </NavLink>
-              <NavLink 
-                to="/agents" 
+              </a>
+              <a
+                href="#agents"
                 className="px-4 py-2 hover:bg-gray-100 rounded transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Agents
-              </NavLink>
-              <NavLink 
-                to="/contact" 
+              </a>
+              <a
+                href="#contact"
                 className="px-4 py-2 hover:bg-gray-100 rounded transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Contact
-              </NavLink>
+              </a>
             </div>
           </nav>
         )}

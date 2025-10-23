@@ -54,7 +54,7 @@ export default function JoinGatekeeper() {
   };
 
   return (
-    <section className="bg-white py-24">
+    <section id="about" className="bg-white py-24">
       <div className="max-w-6xl mx-auto px-4 md:px-6">
         {/* ===== HEADER Section ===== */}
         <div className="text-center mb-16">
@@ -136,7 +136,7 @@ export default function JoinGatekeeper() {
                 whileHover={{ scale: 1.05 }}
                 className="bg-gradient-to-r from-[#0057A6] to-[#0056a6d8] hover:from-[#015fb8] hover:to-[#1d60dd] text-white font-semibold px-7 py-3 rounded-full shadow-md transition-all duration-300"
               >
-                Apply to Join
+                <a href="#agents">Apply to Join</a>
               </motion.button>
             </div>
           </motion.div>
