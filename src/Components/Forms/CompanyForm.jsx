@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-
+import axios from "axios";
+import Swal from "sweetalert2";
 const CompanyForm = () => {
   const [formData, setFormData] = useState({
     // Business Information
@@ -63,11 +64,112 @@ const CompanyForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Application submitted successfully!');
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const frm = e.target;
+
+  // Collect all form data
+  const formData = {
+    logoName: frm.logoName?.value || "",
+    dateEstablished: frm.dateEstablished?.value || "",
+    titleName: frm.titleName?.value || "",
+    taxpayerId: frm.taxpayerId?.value || "",
+    businessType: frm.businessType?.value || "",
+    businessEmail: frm.businessEmail?.value || "",
+    businessWebsite: frm.businessWebsite?.value || "",
+    firstName: frm.firstName?.value || "",
+    lastName: frm.lastName?.value || "",
+    ownerEmail: frm.ownerEmail?.value || "",
+    cellPhone: frm.cellPhone?.value || "",
+    bankName: frm.bankName?.value || "",
+    accountNumber: frm.accountNumber?.value || "",
+    routingNumber: frm.routingNumber?.value || "",
+    contactName: frm.contactName?.value || "",
+    contactPhone: frm.contactPhone?.value || "",
   };
+
+  // 🧾 Formatted plain text message
+  const message = `
+📢 NEW MERCHANT APPLICATION RECEIVED
+
+🏢 BUSINESS INFORMATION
+Business Name: ${formData.logoName}
+Date Established: ${formData.dateEstablished}
+Title: ${formData.titleName}
+Taxpayer ID: ${formData.taxpayerId}
+Business Type: ${formData.businessType}
+Business Email: ${formData.businessEmail}
+Website: ${formData.businessWebsite || "N/A"}
+
+👤 OWNER INFORMATION
+Full Name: ${formData.firstName} ${formData.lastName}
+Owner Email: ${formData.ownerEmail}
+Cell Phone: ${formData.cellPhone}
+
+
+📃BUSINESS REQUIREMENTS 
+Driver's License Provided: ${formData.hasDriversLicense ? "Yes" : "No"}
+Voided Check/Bank Letter Provided: ${formData.hasVoidedCheck ? "Yes" : "No"}
+FNS Provider (EAT/Proof Storage): ${formData.hasFnsProvider ? "Yes" : "No"}
+
+
+🏦 BANK DETAILS
+Bank Name: ${formData.bankName}
+Account Number: ${formData.accountNumber}
+Routing Number: ${formData.routingNumber}
+Contact Name: ${formData.contactName}
+Contact Phone: ${formData.contactPhone}
+
+📅 Submitted On: ${new Date().toLocaleString()}
+
+──────────────────────────────
+📨 This email was sent via PTECHPOS Merchant Form.
+`;
+
+  // 📨 Web3Forms payload
+  const formDataToSend = {
+    access_key: "de8473ac-47a9-419a-917a-1021807f0439",
+    from_name: "PTECHPOS Merchant Application",
+    subject: `New Merchant Application - ${formData.logoName}`,
+    message, // plain text email message
+    replyto: formData.ownerEmail,
+    emails: ["rijoanrashidopar@gmail.com", formData.ownerEmail], // send to both
+  };
+
+  try {
+    const res = await axios.post("https://api.web3forms.com/submit", formDataToSend, {
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (res.data.success) {
+      Swal.fire({
+        title: "Application Submitted 🎉",
+        text: "Your merchant application has been sent successfully!",
+        icon: "success",
+        confirmButtonColor: "#3085d6",
+      });
+
+      frm.reset();
+    } else {
+      Swal.fire({
+        title: "Submission Failed 😕",
+        text: "Something went wrong. Please try again later.",
+        icon: "error",
+        confirmButtonColor: "#d33",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    Swal.fire({
+      title: "Network Error",
+      text: "Unable to send your application. Please check your connection.",
+      icon: "error",
+      confirmButtonColor: "#d33",
+    });
+  }
+};
+
 
   return (
     <div className="min-h-screen  py-8 px-4">

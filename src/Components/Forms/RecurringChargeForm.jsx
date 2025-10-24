@@ -1,5 +1,7 @@
+import axios from "axios";
 import { useState } from "react";
 import { FaCcVisa, FaCcMastercard, FaCcAmex, FaCcDiscover } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const RecurringChargeForm = () => {
   const [formData, setFormData] = useState({
@@ -22,10 +24,99 @@ const RecurringChargeForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Submitted:", formData);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const frm = e.target;
+
+  // Collect all form data
+  const formData = {
+    fullName: frm.fullName?.value || "",
+    companyName: frm.companyName?.value || "",
+    amount: frm.amount?.value || "",
+    date: frm.date?.value || "",
+    paymentFor: frm.paymentFor?.value || "",
+    cardType: frm.cardType?.value || "",
+    cardholderName: frm.cardholderName?.value || "",
+    accountNumber: frm.accountNumber?.value || "",
+    expDate: frm.expDate?.value || "",
+    cvv: frm.cvv?.value || "",
+    signature: frm.signature?.value || "",
+    signatureDate: frm.signatureDate?.value || "",
+    printName: frm.printName?.value || "",
   };
+
+  // Plain text email message
+  const message = `
+📢 NEW RECURRING PAYMENT AUTHORIZATION
+
+👤 AUTHORIZATION DETAILS
+Full Name: ${formData.fullName}
+Company Name: ${formData.companyName}
+
+💰 PAYMENT DETAILS
+Amount: $${formData.amount}
+Charge Date: ${formData.date}
+Payment For: ${formData.paymentFor}
+
+💳 CREDIT CARD / BANK INFORMATION
+Card Type: ${formData.cardType}
+Cardholder Name: ${formData.cardholderName}
+Account Number: ${formData.accountNumber}
+Expiration Date: ${formData.expDate}
+CVV: ${formData.cvv}
+
+✍️ SIGNATURE
+Authorized Signature: ${formData.signature}
+Date: ${formData.signatureDate}
+Printed Name: ${formData.printName}
+
+📅 Submitted On: ${new Date().toLocaleString()}
+
+──────────────────────────────
+📨 This email was sent via RETAILZ POS .
+`;
+
+  // Web3Forms payload
+  const formDataToSend = {
+    access_key: "de8473ac-47a9-419a-917a-1021807f0439",
+    from_name: "RETAILZ POS Recurring Payment",
+    subject: `New Recurring Payment Authorization - ${formData.fullName}`,
+    message,
+    replyto: formData.fullName, // or email if you collect it
+    emails: ["rezoanbids@gmail.com"], // Add other recipients if needed
+  };
+
+  try {
+    const res = await axios.post("https://api.web3forms.com/submit", formDataToSend, {
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (res.data.success) {
+      Swal.fire({
+        title: "Authorization Submitted 🎉",
+        text: "Your recurring payment authorization has been sent successfully!",
+        icon: "success",
+        confirmButtonColor: "#3085d6",
+      });
+      frm.reset();
+    } else {
+      Swal.fire({
+        title: "Submission Failed 😕",
+        text: "Something went wrong. Please try again later.",
+        icon: "error",
+        confirmButtonColor: "#d33",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    Swal.fire({
+      title: "Network Error",
+      text: "Unable to send your authorization. Please check your connection.",
+      icon: "error",
+      confirmButtonColor: "#d33",
+    });
+  }
+};
 
   return (
     <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-8  my-10">
