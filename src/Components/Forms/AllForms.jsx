@@ -4,7 +4,7 @@ import PaymentAuthorizationForm from "./PaymentAuthorizationForm";
 import RecurringChargeForm from "./RecurringChargeForm";
 import { motion, AnimatePresence } from "framer-motion";
 const AllForms = () => {
-  const [activeTab, setActiveTab] = useState("companyForm");
+  const [activeTab, setActiveTab] = useState("paymentForm");
 
     const headerVariants = {
     hidden: { opacity: 0, y: -30 },

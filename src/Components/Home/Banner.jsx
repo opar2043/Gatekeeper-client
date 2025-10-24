@@ -133,7 +133,7 @@ const Banner = () => {
               whileTap={{ scale: 0.95 }}
               className="bg-white text-[#0057A6] px-8 py-4 rounded-full font-semibold text-md transition-all duration-300 shadow-xl hover:shadow-2xl"
             >
-              <a href="#agents">Get Started →</a>
+              <a href="#forms">Get Started →</a>
             </motion.button>
             <motion.button
               whileHover={{
@@ -143,7 +143,7 @@ const Banner = () => {
               whileTap={{ scale: 0.95 }}
               className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-md transition-all duration-300 hover:bg-white hover:text-[#0057A6]"
             >
-              <a href="#agents">Join the Team</a>
+              <a href="#forms">Join the Team</a>
             </motion.button>
           </motion.div>
         </motion.div>

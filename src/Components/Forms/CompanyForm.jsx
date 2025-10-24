@@ -172,7 +172,7 @@ Contact Phone: ${formData.contactPhone}
 
 
   return (
-    <div className="min-h-screen  py-8 px-4">
+    <div className="min-h-screen py-5 px-2 md:py-8 md:px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -182,8 +182,8 @@ Contact Phone: ${formData.contactPhone}
         </div>
 
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          {/* Business Information Section */}
-          <section className="p-8 border-b border-gray-200">
+          {/* Business Information Section * */}
+          <section className="md:p-8 p-4 border-b border-gray-200">
             <div className="flex items-center mb-6">
               <div className="w-1 h-8 bg-blue-500 rounded-full mr-4"></div>
               <h2 className="text-2xl font-bold text-gray-800">Business Information</h2>
@@ -194,7 +194,7 @@ Contact Phone: ${formData.contactPhone}
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Logo Name of Business *
+                    Logo Name of Business
                   </label>
                   <input
                     type="text"
@@ -209,7 +209,7 @@ Contact Phone: ${formData.contactPhone}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Date Established *
+                      Date Established
                     </label>
                     <input
                       type="date"
@@ -222,7 +222,7 @@ Contact Phone: ${formData.contactPhone}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Title Name *
+                      Title Name
                     </label>
                     <input
                       type="text"
@@ -237,7 +237,7 @@ Contact Phone: ${formData.contactPhone}
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Taxpayer Identification Number *
+                    Taxpayer Identification Number
                   </label>
                   <input
                     type="text"
@@ -251,7 +251,7 @@ Contact Phone: ${formData.contactPhone}
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Business Type *
+                    Business Type
                   </label>
                   <select
                     name="businessType"
@@ -272,7 +272,7 @@ Contact Phone: ${formData.contactPhone}
                 {formData.businessType === 'other' && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Please describe your business *
+                      Please describe your business
                     </label>
                     <input
                       type="text"
@@ -288,7 +288,7 @@ Contact Phone: ${formData.contactPhone}
 
               {/* Right Column */}
               <div className="space-y-4">
-                <div className="bg-blue-50 p-4 rounded-lg">
+                <div className="bg-blue-50 md:p-4 p-2 rounded-lg">
                   <h3 className="font-semibold text-blue-800 mb-2">Physical Address</h3>
                   <div className="space-y-3">
                     <input
@@ -342,7 +342,7 @@ Contact Phone: ${formData.contactPhone}
                   </div>
                 </div>
 
-                <div className="bg-green-50 p-4 rounded-lg">
+                <div className="bg-green-50 md:p-4 p-2 rounded-lg">
                   <h3 className="font-semibold text-green-800 mb-2">Billing Address</h3>
                   <div className="space-y-3">
                     <input
@@ -396,10 +396,10 @@ Contact Phone: ${formData.contactPhone}
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 md:gap-4 gap-2">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Business Email *
+                      Business Email
                     </label>
                     <input
                       type="email"
@@ -428,18 +428,18 @@ Contact Phone: ${formData.contactPhone}
           </section>
 
           {/* Principal Information Section */}
-          <section className="p-8 border-b border-gray-200">
+          <section className="md:p-8 p-4 border-b border-gray-200">
             <div className="flex items-center mb-6">
               <div className="w-1 h-8 bg-green-500 rounded-full mr-4"></div>
               <h2 className="text-2xl font-bold text-gray-800">Principal Owner Information</h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 md:gap-6 gap-4">
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      First Name *
+                      First Name
                     </label>
                     <input
                       type="text"
@@ -452,7 +452,7 @@ Contact Phone: ${formData.contactPhone}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Last Name *
+                      Last Name
                     </label>
                     <input
                       type="text"
@@ -467,7 +467,7 @@ Contact Phone: ${formData.contactPhone}
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Position Held *
+                    Position Held
                   </label>
                   <input
                     type="text"
@@ -482,7 +482,7 @@ Contact Phone: ${formData.contactPhone}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Date of Birth *
+                      Date of Birth
                     </label>
                     <input
                       type="date"
@@ -495,7 +495,7 @@ Contact Phone: ${formData.contactPhone}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      SSN *
+                      SSN
                     </label>
                     <input
                       type="text"
@@ -510,7 +510,7 @@ Contact Phone: ${formData.contactPhone}
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Home Phone *
+                    Home Phone
                   </label>
                   <input
                     type="tel"
@@ -581,7 +581,7 @@ Contact Phone: ${formData.contactPhone}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      License Number *
+                      License Number
                     </label>
                     <input
                       type="text"
@@ -594,7 +594,7 @@ Contact Phone: ${formData.contactPhone}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      License State *
+                      License State
                     </label>
                     <input
                       type="text"
@@ -610,7 +610,7 @@ Contact Phone: ${formData.contactPhone}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      License Expiration *
+                      License Expiration
                     </label>
                     <input
                       type="date"
@@ -623,7 +623,7 @@ Contact Phone: ${formData.contactPhone}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Cell Phone *
+                      Cell Phone
                     </label>
                     <input
                       type="tel"
@@ -638,7 +638,7 @@ Contact Phone: ${formData.contactPhone}
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Owner Email Address *
+                    Owner Email Address
                   </label>
                   <input
                     type="email"
@@ -654,13 +654,13 @@ Contact Phone: ${formData.contactPhone}
           </section>
 
           {/* Business Requirements Section */}
-          <section className="p-8 border-b border-gray-200">
+          <section className="md:p-8 p-4 border-b border-gray-200">
             <div className="flex items-center mb-6">
               <div className="w-1 h-8 bg-purple-500 rounded-full mr-4"></div>
               <h2 className="text-2xl font-bold text-gray-800">Business Requirements</h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6 gap-4">
               <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-blue-50 cursor-pointer transition-colors">
                 <input
                   type="checkbox"
@@ -697,7 +697,7 @@ Contact Phone: ${formData.contactPhone}
           </section>
 
           {/* Banking Information Section */}
-          <section className="p-8">
+          <section className="md:p-8 p-4">
             <div className="flex items-center mb-6">
               <div className="w-1 h-8 bg-orange-500 rounded-full mr-4"></div>
               <h2 className="text-2xl font-bold text-gray-800">Banking Information</h2>
@@ -707,7 +707,7 @@ Contact Phone: ${formData.contactPhone}
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Bank Name *
+                    Bank Name
                   </label>
                   <input
                     type="text"
@@ -721,7 +721,7 @@ Contact Phone: ${formData.contactPhone}
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Bank Address *
+                    Bank Address
                   </label>
                   <input
                     type="text"
@@ -735,7 +735,7 @@ Contact Phone: ${formData.contactPhone}
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Business Checking Account Number *
+                    Business Checking Account Number
                   </label>
                   <input
                     type="text"
@@ -751,7 +751,7 @@ Contact Phone: ${formData.contactPhone}
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Contact Name *
+                    Contact Name
                   </label>
                   <input
                     type="text"
@@ -765,7 +765,7 @@ Contact Phone: ${formData.contactPhone}
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Contact Phone *
+                    Contact Phone
                   </label>
                   <input
                     type="tel"
@@ -779,7 +779,7 @@ Contact Phone: ${formData.contactPhone}
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Business Checking Routing Number *
+                    Business Checking Routing Number
                   </label>
                   <input
                     type="text"

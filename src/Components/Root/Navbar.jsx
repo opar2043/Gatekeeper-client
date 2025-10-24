@@ -78,9 +78,9 @@ const Navbar = () => {
             <a href="#forms" className={navLinkStyle}>
               Forms
             </a>
-            <a href="#agents" className={navLinkStyle}>
+            {/* <a href="#agents" className={navLinkStyle}>
               Agents
-            </a>
+            </a> */}
             <a href="#contact" className={navLinkStyle}>
               Contact
             </a>
@@ -134,11 +134,11 @@ const Navbar = () => {
                 Equipment
               </a>
               <a
-                href="#agents"
+                href="#forms"
                 className="px-4 py-2 hover:bg-gray-100 rounded transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Agents
+                Forms
               </a>
               <a
                 href="#contact"
