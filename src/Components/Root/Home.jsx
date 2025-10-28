@@ -23,9 +23,7 @@ const Home = () => {
       <GetStartedSection></GetStartedSection>
       {/* <AgentForm></AgentForm> */}
       <ContactInfo></ContactInfo>
-      {/* <CompanyForm></CompanyForm>
-      <PaymentAuthorizationForm></PaymentAuthorizationForm>
-      <RecurringChargeForm></RecurringChargeForm> */}
+
     </div>
   )
 }

@@ -32,7 +32,7 @@ const AllForms = () => {
   };
 
   return (
-    <div id="forms" className="max-w-7xl mx-auto bg-white rounded-2xl   mt-10 p-6">
+    <div id="forms" className="max-w-7xl mx-auto bg-white rounded-2xl   mt-10 p-4">
         <motion.div
         variants={headerVariants}
         initial="hidden"

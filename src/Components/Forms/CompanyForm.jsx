@@ -69,8 +69,8 @@ const handleSubmit = async (e) => {
 
   const frm = e.target;
 
-  // Collect all form data
-  const formData = {
+  // Collect all form data, including checkboxes from state
+  const collectedData = {
     logoName: frm.logoName?.value || "",
     dateEstablished: frm.dateEstablished?.value || "",
     titleName: frm.titleName?.value || "",
@@ -87,54 +87,54 @@ const handleSubmit = async (e) => {
     routingNumber: frm.routingNumber?.value || "",
     contactName: frm.contactName?.value || "",
     contactPhone: frm.contactPhone?.value || "",
+
+    // ✅ Add checkbox values from state
+    hasDriversLicense: formData.hasDriversLicense,
+    hasVoidedCheck: formData.hasVoidedCheck,
+    hasFnsProvider: formData.hasFnsProvider,
   };
 
-  // 🧾 Formatted plain text message
   const message = `
 📢 NEW MERCHANT APPLICATION RECEIVED
 
 🏢 BUSINESS INFORMATION
-Business Name: ${formData.logoName}
-Date Established: ${formData.dateEstablished}
-Title: ${formData.titleName}
-Taxpayer ID: ${formData.taxpayerId}
-Business Type: ${formData.businessType}
-Business Email: ${formData.businessEmail}
-Website: ${formData.businessWebsite || "N/A"}
+Business Name: ${collectedData.logoName}
+Date Established: ${collectedData.dateEstablished}
+Title: ${collectedData.titleName}
+Taxpayer ID: ${collectedData.taxpayerId}
+Business Type: ${collectedData.businessType}
+Business Email: ${collectedData.businessEmail}
+Website: ${collectedData.businessWebsite || "N/A"}
 
 👤 OWNER INFORMATION
-Full Name: ${formData.firstName} ${formData.lastName}
-Owner Email: ${formData.ownerEmail}
-Cell Phone: ${formData.cellPhone}
+Full Name: ${collectedData.firstName} ${collectedData.lastName}
+Owner Email: ${collectedData.ownerEmail}
+Cell Phone: ${collectedData.cellPhone}
 
-
-📃BUSINESS REQUIREMENTS 
-Driver's License Provided: ${formData.hasDriversLicense ? "Yes" : "No"}
-Voided Check/Bank Letter Provided: ${formData.hasVoidedCheck ? "Yes" : "No"}
-FNS Provider (EAT/Proof Storage): ${formData.hasFnsProvider ? "Yes" : "No"}
-
+📃 BUSINESS REQUIREMENTS
+Driver's License Provided: ${collectedData.hasDriversLicense ? "Yes" : "No"}
+Voided Check/Bank Letter Provided: ${collectedData.hasVoidedCheck ? "Yes" : "No"}
+FNS Provider (EAT/Proof Storage): ${collectedData.hasFnsProvider ? "Yes" : "No"}
 
 🏦 BANK DETAILS
-Bank Name: ${formData.bankName}
-Account Number: ${formData.accountNumber}
-Routing Number: ${formData.routingNumber}
-Contact Name: ${formData.contactName}
-Contact Phone: ${formData.contactPhone}
+Bank Name: ${collectedData.bankName}
+Account Number: ${collectedData.accountNumber}
+Routing Number: ${collectedData.routingNumber}
+Contact Name: ${collectedData.contactName}
+Contact Phone: ${collectedData.contactPhone}
 
 📅 Submitted On: ${new Date().toLocaleString()}
-
 ──────────────────────────────
 📨 This email was sent via PTECHPOS Merchant Form.
 `;
 
-  // 📨 Web3Forms payload
   const formDataToSend = {
     access_key: "de8473ac-47a9-419a-917a-1021807f0439",
     from_name: "PTECHPOS Merchant Application",
-    subject: `New Merchant Application - ${formData.logoName}`,
-    message, // plain text email message
-    replyto: formData.ownerEmail,
-    emails: ["rijoanrashidopar@gmail.com", formData.ownerEmail], // send to both
+    subject: `New Merchant Application - ${collectedData.logoName}`,
+    message,
+    replyto: collectedData.ownerEmail,
+    emails: ["rezoanbids@gmail.com", collectedData.ownerEmail],
   };
 
   try {
@@ -144,31 +144,21 @@ Contact Phone: ${formData.contactPhone}
 
     if (res.data.success) {
       Swal.fire({
-        title: "Application Submitted 🎉",
+        title: "Application Submitted ",
         text: "Your merchant application has been sent successfully!",
         icon: "success",
-        confirmButtonColor: "#3085d6",
       });
-
       frm.reset();
-    } else {
-      Swal.fire({
-        title: "Submission Failed 😕",
-        text: "Something went wrong. Please try again later.",
-        icon: "error",
-        confirmButtonColor: "#d33",
-      });
     }
   } catch (error) {
-    console.error(error);
     Swal.fire({
-      title: "Network Error",
-      text: "Unable to send your application. Please check your connection.",
+      title: "Error",
+      text: "Failed to send your application. Please try again.",
       icon: "error",
-      confirmButtonColor: "#d33",
     });
   }
 };
+
 
 
   return (

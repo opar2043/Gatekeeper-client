@@ -1,0 +1,27 @@
+[
+  {
+    "role": "admin",
+    "name": "Rijoan Rashid",
+    "email": "rijoanrashid@gatekeeper.com"
+  },
+  {
+    "role": "agent",
+    "name": "Maisha Ahmed",
+    "email": "maisha.ahmed@gatekeeper.com"
+  },
+  {
+    "role": "agent",
+    "name": "Nayeem Hasan",
+    "email": "nayeem.hasan@gatekeeper.com"
+  },
+  {
+    "role": "admin",
+    "name": "Tanjila Akter",
+    "email": "tanjila.akter@gatekeeper.com"
+  },
+  {
+    "role": "admin",
+    "name": "Fahim Reza",
+    "email": "fahim.reza@gatekeeper.com"
+  }
+]
