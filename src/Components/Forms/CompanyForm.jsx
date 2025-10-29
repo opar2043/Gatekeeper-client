@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import useAxios from "../Hooks/useAxios";
+import toast from "react-hot-toast";
 const CompanyForm = () => {
   const [formData, setFormData] = useState({
     // Business Information
@@ -23,7 +25,7 @@ const CompanyForm = () => {
     billingZip: "",
     businessEmail: "",
     businessWebsite: "",
-    
+
     // Principal Information
     firstName: "",
     lastName: "",
@@ -41,60 +43,61 @@ const CompanyForm = () => {
     licenseExpiration: "",
     ownerEmail: "",
     cellPhone: "",
-    
+
     // Business Requirements
     hasDriversLicense: false,
     hasVoidedCheck: false,
     hasFnsProvider: false,
-    
+
     // Banking Information
     bankName: "",
     bankAddress: "",
     accountNumber: "",
     contactName: "",
     contactPhone: "",
-    routingNumber: ""
+    routingNumber: "",
   });
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
+  const axiosSecure = useAxios();
+
 const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
+    const frm = e.target;
 
-  const frm = e.target;
+    const collectedData = {
+      logoName: frm.logoName?.value || "",
+      dateEstablished: frm.dateEstablished?.value || "",
+      titleName: frm.titleName?.value || "",
+      taxpayerId: frm.taxpayerId?.value || "",
+      businessType: frm.businessType?.value || "",
+      businessEmail: frm.businessEmail?.value || "",
+      businessWebsite: frm.businessWebsite?.value || "",
+      firstName: frm.firstName?.value || "",
+      lastName: frm.lastName?.value || "",
+      ownerEmail: frm.ownerEmail?.value || "",
+      cellPhone: frm.cellPhone?.value || "",
+      bankName: frm.bankName?.value || "",
+      accountNumber: frm.accountNumber?.value || "",
+      routingNumber: frm.routingNumber?.value || "",
+      contactName: frm.contactName?.value || "",
+      contactPhone: frm.contactPhone?.value || "",
+      hasDriversLicense: formData.hasDriversLicense,
+      hasVoidedCheck: formData.hasVoidedCheck,
+      hasFnsProvider: formData.hasFnsProvider,
+    };
 
-  // Collect all form data, including checkboxes from state
-  const collectedData = {
-    logoName: frm.logoName?.value || "",
-    dateEstablished: frm.dateEstablished?.value || "",
-    titleName: frm.titleName?.value || "",
-    taxpayerId: frm.taxpayerId?.value || "",
-    businessType: frm.businessType?.value || "",
-    businessEmail: frm.businessEmail?.value || "",
-    businessWebsite: frm.businessWebsite?.value || "",
-    firstName: frm.firstName?.value || "",
-    lastName: frm.lastName?.value || "",
-    ownerEmail: frm.ownerEmail?.value || "",
-    cellPhone: frm.cellPhone?.value || "",
-    bankName: frm.bankName?.value || "",
-    accountNumber: frm.accountNumber?.value || "",
-    routingNumber: frm.routingNumber?.value || "",
-    contactName: frm.contactName?.value || "",
-    contactPhone: frm.contactPhone?.value || "",
+    try {
+      await axiosSecure.post("/merchants", collectedData);
 
-    // ✅ Add checkbox values from state
-    hasDriversLicense: formData.hasDriversLicense,
-    hasVoidedCheck: formData.hasVoidedCheck,
-    hasFnsProvider: formData.hasFnsProvider,
-  };
-
-  const message = `
+ const message = `
 📢 NEW MERCHANT APPLICATION RECEIVED
 
 🏢 BUSINESS INFORMATION
@@ -128,38 +131,32 @@ Contact Phone: ${collectedData.contactPhone}
 📨 This email was sent via PTECHPOS Merchant Form.
 `;
 
-  const formDataToSend = {
-    access_key: "de8473ac-47a9-419a-917a-1021807f0439",
-    from_name: "PTECHPOS Merchant Application",
-    subject: `New Merchant Application - ${collectedData.logoName}`,
-    message,
-    replyto: collectedData.ownerEmail,
-    emails: ["rezoanbids@gmail.com", collectedData.ownerEmail],
-  };
+      const formDataToSend = {
+        access_key: "de8473ac-47a9-419a-917a-1021807f0439",
+        from_name: "PTECHPOS Merchant Application",
+        subject: `New Merchant Application - ${collectedData.logoName}`,
+        message,
+        replyto: collectedData.ownerEmail,
+        emails: ["rezoanbids@gmail.com", collectedData.ownerEmail],
+      };
 
-  try {
-    const res = await axios.post("https://api.web3forms.com/submit", formDataToSend, {
-      headers: { "Content-Type": "application/json" },
-    });
+      const res = await axios.post(
+        "https://api.web3forms.com/submit",
+        formDataToSend,
+        { headers: { "Content-Type": "application/json" } }
+      );
 
-    if (res.data.success) {
-      Swal.fire({
-        title: "Application Submitted ",
-        text: "Your merchant application has been sent successfully!",
-        icon: "success",
-      });
-      frm.reset();
+      if (res.data.success) {
+        toast.success("Application submitted successfully!");
+        frm.reset();
+      } else {
+        toast.error("Failed to send your application. Try again.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong. Please try again later.");
     }
-  } catch (error) {
-    Swal.fire({
-      title: "Error",
-      text: "Failed to send your application. Please try again.",
-      icon: "error",
-    });
-  }
-};
-
-
+  };
 
   return (
     <div className="min-h-screen py-5 px-2 md:py-8 md:px-4">
@@ -167,16 +164,25 @@ Contact Phone: ${collectedData.contactPhone}
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-2">PTECHPOS</h1>
-          <h2 className="text-2xl font-semibold text-blue-600 mb-4">MERCHANT APPLICATION</h2>
-          <p className="text-gray-600">Complete the form below to apply for a merchant account</p>
+          <h2 className="text-2xl font-semibold text-blue-600 mb-4">
+            MERCHANT APPLICATION
+          </h2>
+          <p className="text-gray-600">
+            Complete the form below to apply for a merchant account
+          </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white rounded-2xl shadow-xl overflow-hidden"
+        >
           {/* Business Information Section * */}
           <section className="md:p-8 p-4 border-b border-gray-200">
             <div className="flex items-center mb-6">
               <div className="w-1 h-8 bg-blue-500 rounded-full mr-4"></div>
-              <h2 className="text-2xl font-bold text-gray-800">Business Information</h2>
+              <h2 className="text-2xl font-bold text-gray-800">
+                Business Information
+              </h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -259,7 +265,7 @@ Contact Phone: ${collectedData.contactPhone}
                   </select>
                 </div>
 
-                {formData.businessType === 'other' && (
+                {formData.businessType === "other" && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Please describe your business
@@ -279,7 +285,9 @@ Contact Phone: ${collectedData.contactPhone}
               {/* Right Column */}
               <div className="space-y-4">
                 <div className="bg-blue-50 md:p-4 p-2 rounded-lg">
-                  <h3 className="font-semibold text-blue-800 mb-2">Physical Address</h3>
+                  <h3 className="font-semibold text-blue-800 mb-2">
+                    Physical Address
+                  </h3>
                   <div className="space-y-3">
                     <input
                       type="text"
@@ -333,7 +341,9 @@ Contact Phone: ${collectedData.contactPhone}
                 </div>
 
                 <div className="bg-green-50 md:p-4 p-2 rounded-lg">
-                  <h3 className="font-semibold text-green-800 mb-2">Billing Address</h3>
+                  <h3 className="font-semibold text-green-800 mb-2">
+                    Billing Address
+                  </h3>
                   <div className="space-y-3">
                     <input
                       type="text"
@@ -421,7 +431,9 @@ Contact Phone: ${collectedData.contactPhone}
           <section className="md:p-8 p-4 border-b border-gray-200">
             <div className="flex items-center mb-6">
               <div className="w-1 h-8 bg-green-500 rounded-full mr-4"></div>
-              <h2 className="text-2xl font-bold text-gray-800">Principal Owner Information</h2>
+              <h2 className="text-2xl font-bold text-gray-800">
+                Principal Owner Information
+              </h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 md:gap-6 gap-4">
@@ -515,7 +527,9 @@ Contact Phone: ${collectedData.contactPhone}
 
               <div className="space-y-4">
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="font-semibold text-gray-800 mb-2">Home Address</h3>
+                  <h3 className="font-semibold text-gray-800 mb-2">
+                    Home Address
+                  </h3>
                   <div className="space-y-3">
                     <input
                       type="text"
@@ -647,7 +661,9 @@ Contact Phone: ${collectedData.contactPhone}
           <section className="md:p-8 p-4 border-b border-gray-200">
             <div className="flex items-center mb-6">
               <div className="w-1 h-8 bg-purple-500 rounded-full mr-4"></div>
-              <h2 className="text-2xl font-bold text-gray-800">Business Requirements</h2>
+              <h2 className="text-2xl font-bold text-gray-800">
+                Business Requirements
+              </h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6 gap-4">
@@ -659,7 +675,9 @@ Contact Phone: ${collectedData.contactPhone}
                   onChange={handleChange}
                   className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
                 />
-                <span className="text-gray-700 font-medium">Driver's License</span>
+                <span className="text-gray-700 font-medium">
+                  Driver's License
+                </span>
               </label>
 
               <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-blue-50 cursor-pointer transition-colors">
@@ -670,7 +688,9 @@ Contact Phone: ${collectedData.contactPhone}
                   onChange={handleChange}
                   className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
                 />
-                <span className="text-gray-700 font-medium">Voided Check or Bank Letter</span>
+                <span className="text-gray-700 font-medium">
+                  Voided Check or Bank Letter
+                </span>
               </label>
 
               <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-blue-50 cursor-pointer transition-colors">
@@ -681,7 +701,9 @@ Contact Phone: ${collectedData.contactPhone}
                   onChange={handleChange}
                   className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
                 />
-                <span className="text-gray-700 font-medium">FNS Provider (EAT/Proof Storage)</span>
+                <span className="text-gray-700 font-medium">
+                  FNS Provider (EAT/Proof Storage)
+                </span>
               </label>
             </div>
           </section>
@@ -690,7 +712,9 @@ Contact Phone: ${collectedData.contactPhone}
           <section className="md:p-8 p-4">
             <div className="flex items-center mb-6">
               <div className="w-1 h-8 bg-orange-500 rounded-full mr-4"></div>
-              <h2 className="text-2xl font-bold text-gray-800">Banking Information</h2>
+              <h2 className="text-2xl font-bold text-gray-800">
+                Banking Information
+              </h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

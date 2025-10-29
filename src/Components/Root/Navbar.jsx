@@ -162,6 +162,9 @@ const Navbar = () => {
               >
                 Contact
               </a>
+            <Link to={"/dashboard"} className={navLinkStyle}>
+              Dashboard
+            </Link>
             </div>
           </nav>
         )}

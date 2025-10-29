@@ -2,6 +2,7 @@ import { useState } from "react";
 import { HiOutlineCreditCard, HiOutlineBanknotes, HiOutlineHome, HiOutlineUserCircle } from "react-icons/hi2";
 import Swal from "sweetalert2";
 import axios from "axios";
+import useAxios from "../Hooks/useAxios";
 
 const PaymentAuthorizationForm = () => {
   const [formData, setFormData] = useState({
@@ -25,6 +26,8 @@ const PaymentAuthorizationForm = () => {
     billingZip: "",
     billingEmail: "",
   });
+
+  const axiosSecure = useAxios();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -108,6 +111,7 @@ Email: ${formData.billingEmail}
       });
 
       if (res.data.success) {
+        axiosSecure.post("/payment" , formData)
         Swal.fire({
           title: "Authorization Submitted",
           text: "Your payment authorization has been sent successfully!",

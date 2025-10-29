@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Store, User, Mail, Eye, Search, Filter, CheckCircle, Clock } from "lucide-react";
+import useMarchent from "../../Hooks/useMarchent";
 
 const MerchantData = () => {
   const [merchants, setMerchants] = useState([]);
@@ -14,7 +15,12 @@ const MerchantData = () => {
       .catch((err) => console.error("Error loading merchant data:", err));
   }, []);
 
-  const filteredMerchants = merchants.filter((merchant) => {
+
+  const [marchants] = useMarchent([]) || [];
+  console.log(marchants);
+
+
+  const filteredMerchants = merchants &&  merchants?.filter((merchant) => {
     const matchesSearch = 
       merchant.logoName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       merchant.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -26,8 +32,8 @@ const MerchantData = () => {
     return matchesSearch && matchesFilter;
   });
 
-  const confirmedCount = merchants.filter(m => m.status === "confirmed").length;
-  const pendingCount = merchants.filter(m => m.status === "pending").length;
+  const confirmedCount = merchants.filter(m => m.status === "confirmed").length || 0;
+  const pendingCount = merchants.filter(m => m.status === "pending").length || 0;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 p-6">

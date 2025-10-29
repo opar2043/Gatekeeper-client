@@ -1,7 +1,13 @@
 import axios from "axios";
 import { useState } from "react";
-import { FaCcVisa, FaCcMastercard, FaCcAmex, FaCcDiscover } from "react-icons/fa";
+import {
+  FaCcVisa,
+  FaCcMastercard,
+  FaCcAmex,
+  FaCcDiscover,
+} from "react-icons/fa";
 import Swal from "sweetalert2";
+import useAxios from "../Hooks/useAxios";
 
 const RecurringChargeForm = () => {
   const [formData, setFormData] = useState({
@@ -23,6 +29,8 @@ const RecurringChargeForm = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  const axiosSecure = useAxios();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,11 +95,16 @@ Printed Name: ${formData.printName}
     };
 
     try {
-      const res = await axios.post("https://api.web3forms.com/submit", formDataToSend, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const res = await axios.post(
+        "https://api.web3forms.com/submit",
+        formDataToSend,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       if (res.data.success) {
+        axiosSecure.post("/authorization");
         Swal.fire({
           title: "Authorization Submitted 🎉",
           text: "Your recurring payment authorization has been sent successfully!",
@@ -277,7 +290,7 @@ Printed Name: ${formData.printName}
           transform: scale(1.1);
         }
       `}</style>
-      
+
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-4 md:p-8 my-6 sm:my-10 card-animate animate-fade-in-up">
         <div className="text-center mb-4 sm:mb-6 animate-scale-in">
           <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
@@ -292,18 +305,24 @@ Printed Name: ${formData.printName}
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {/* Recurring Checkbox */}
           <div className="flex items-start gap-3 section-animate">
-            <input type="checkbox" className="mt-1 w-5 h-5 accent-red-500 checkbox-animate cursor-pointer" />
+            <input
+              type="checkbox"
+              className="mt-1 w-5 h-5 accent-red-500 checkbox-animate cursor-pointer"
+            />
             <p className="text-xs sm:text-sm text-gray-700">
-              <span className="font-semibold">RECURRING CHARGE</span> — You authorize
-              regularly scheduled charges to your credit card or bank account. You will be charged the amount indicated below
-              until you cancel in writing.
+              <span className="font-semibold">RECURRING CHARGE</span> — You
+              authorize regularly scheduled charges to your credit card or bank
+              account. You will be charged the amount indicated below until you
+              cancel in writing.
             </p>
           </div>
 
           {/* Authorization Fields */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mt-4 sm:mt-6 section-animate">
             <div className="animate-slide-in-left">
-              <label className="text-xs sm:text-sm font-medium">Full Name</label>
+              <label className="text-xs sm:text-sm font-medium">
+                Full Name
+              </label>
               <input
                 name="fullName"
                 value={formData.fullName}
@@ -313,7 +332,9 @@ Printed Name: ${formData.printName}
               />
             </div>
             <div className="animate-slide-in-right">
-              <label className="text-xs sm:text-sm font-medium">Company Name</label>
+              <label className="text-xs sm:text-sm font-medium">
+                Company Name
+              </label>
               <input
                 name="companyName"
                 value={formData.companyName}
@@ -327,7 +348,9 @@ Printed Name: ${formData.printName}
           {/* Payment Info */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mt-3 sm:mt-4 section-animate">
             <div>
-              <label className="text-xs sm:text-sm font-medium">Amount ($)</label>
+              <label className="text-xs sm:text-sm font-medium">
+                Amount ($)
+              </label>
               <input
                 type="number"
                 step="0.01"
@@ -339,7 +362,9 @@ Printed Name: ${formData.printName}
               />
             </div>
             <div>
-              <label className="text-xs sm:text-sm font-medium">Charge Date</label>
+              <label className="text-xs sm:text-sm font-medium">
+                Charge Date
+              </label>
               <input
                 type="date"
                 name="date"
@@ -350,7 +375,9 @@ Printed Name: ${formData.printName}
               />
             </div>
             <div className="sm:col-span-2 md:col-span-1">
-              <label className="text-xs sm:text-sm font-medium">Payment For</label>
+              <label className="text-xs sm:text-sm font-medium">
+                Payment For
+              </label>
               <input
                 name="paymentFor"
                 value={formData.paymentFor}
@@ -363,7 +390,9 @@ Printed Name: ${formData.printName}
 
           {/* Credit Card Section */}
           <div className="border border-gray-300 rounded-lg p-3 sm:p-4 mt-4 sm:mt-6 section-animate card-animate">
-            <h3 className="font-semibold text-gray-700 mb-2 sm:mb-3 text-sm sm:text-base">CREDIT CARD INFORMATION</h3>
+            <h3 className="font-semibold text-gray-700 mb-2 sm:mb-3 text-sm sm:text-base">
+              CREDIT CARD INFORMATION
+            </h3>
             <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
               <FaCcVisa className="text-blue-500 text-xl sm:text-2xl icon-bounce cursor-pointer" />
               <FaCcMastercard className="text-orange-500 text-xl sm:text-2xl icon-bounce cursor-pointer" />
@@ -372,7 +401,9 @@ Printed Name: ${formData.printName}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
               <div>
-                <label className="text-xs sm:text-sm font-medium">Cardholder Name</label>
+                <label className="text-xs sm:text-sm font-medium">
+                  Cardholder Name
+                </label>
                 <input
                   name="cardholderName"
                   value={formData.cardholderName}
@@ -382,7 +413,9 @@ Printed Name: ${formData.printName}
                 />
               </div>
               <div>
-                <label className="text-xs sm:text-sm font-medium">Account Number</label>
+                <label className="text-xs sm:text-sm font-medium">
+                  Account Number
+                </label>
                 <input
                   name="accountNumber"
                   value={formData.accountNumber}
@@ -392,7 +425,9 @@ Printed Name: ${formData.printName}
                 />
               </div>
               <div>
-                <label className="text-xs sm:text-sm font-medium">Expiration Date</label>
+                <label className="text-xs sm:text-sm font-medium">
+                  Expiration Date
+                </label>
                 <input
                   type="month"
                   name="expDate"
@@ -419,7 +454,9 @@ Printed Name: ${formData.printName}
           {/* Signature */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mt-3 sm:mt-4 section-animate">
             <div className="animate-slide-in-left">
-              <label className="text-xs sm:text-sm font-medium">Authorized Signature</label>
+              <label className="text-xs sm:text-sm font-medium">
+                Authorized Signature
+              </label>
               <input
                 name="signature"
                 value={formData.signature}

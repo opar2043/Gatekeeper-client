@@ -1,6 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { CreditCard, Building2, DollarSign, Calendar, Eye, Search, Filter, CheckCircle, Clock, TrendingUp } from "lucide-react";
+import {
+  CreditCard,
+  Building2,
+  DollarSign,
+  Calendar,
+  Eye,
+  Search,
+  Filter,
+  CheckCircle,
+  Clock,
+  TrendingUp,
+} from "lucide-react";
+import usePayment from "../../Hooks/usePayment";
 
 const PaymentData = () => {
   const [charges, setCharges] = useState([]);
@@ -8,6 +20,7 @@ const PaymentData = () => {
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterChargeType, setFilterChargeType] = useState("all");
 
+  const [payment] = usePayment();
   useEffect(() => {
     fetch("/payment.json")
       .then((res) => res.json())
@@ -15,22 +28,29 @@ const PaymentData = () => {
       .catch((err) => console.error("Error loading charges:", err));
   }, []);
 
+  console.log(payment);
+
   const filteredCharges = charges.filter((charge) => {
-    const matchesSearch = 
+    const matchesSearch =
       charge.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       charge.companyName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       charge.chargeType?.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesStatus = filterStatus === "all" || charge.status === filterStatus;
-    const matchesChargeType = filterChargeType === "all" || charge.chargeType === filterChargeType;
-    
+
+    const matchesStatus =
+      filterStatus === "all" || charge.status === filterStatus;
+    const matchesChargeType =
+      filterChargeType === "all" || charge.chargeType === filterChargeType;
+
     return matchesSearch && matchesStatus && matchesChargeType;
   });
 
-  const confirmedCount = charges.filter(c => c.status === "confirmed").length;
-  const pendingCount = charges.filter(c => c.status === "pending").length;
-  const totalAmount = charges.reduce((sum, c) => sum + parseFloat(c.amount || 0), 0);
-  const chargeTypes = [...new Set(charges.map(c => c.chargeType))];
+  const confirmedCount = charges.filter((c) => c.status === "confirmed").length;
+  const pendingCount = charges.filter((c) => c.status === "pending").length;
+  const totalAmount = charges.reduce(
+    (sum, c) => sum + parseFloat(c.amount || 0),
+    0
+  );
+  const chargeTypes = [...new Set(charges.map((c) => c.chargeType))];
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -43,7 +63,9 @@ const PaymentData = () => {
             </div>
             Payment Charges
           </h1>
-          <p className="text-gray-600">Track and manage all recurring payment charges</p>
+          <p className="text-gray-600">
+            Track and manage all recurring payment charges
+          </p>
         </div>
 
         {/* Stats Cards */}
@@ -65,7 +87,9 @@ const PaymentData = () => {
               </div>
             </div>
             <p className="text-sm text-gray-600 mb-1">Confirmed</p>
-            <p className="text-3xl font-bold text-emerald-600">{confirmedCount}</p>
+            <p className="text-3xl font-bold text-emerald-600">
+              {confirmedCount}
+            </p>
           </div>
 
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
@@ -85,7 +109,9 @@ const PaymentData = () => {
               </div>
             </div>
             <p className="text-sm text-gray-600 mb-1">Total Amount</p>
-            <p className="text-3xl font-bold text-[#1562B1]">${totalAmount.toFixed(2)}</p>
+            <p className="text-3xl font-bold text-[#1562B1]">
+              ${totalAmount.toFixed(2)}
+            </p>
           </div>
         </div>
 
@@ -125,7 +151,9 @@ const PaymentData = () => {
               >
                 <option value="all">All Types</option>
                 {chargeTypes.map((type, idx) => (
-                  <option key={idx} value={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</option>
+                  <option key={idx} value={type}>
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                  </option>
                 ))}
               </select>
             </div>
@@ -138,14 +166,30 @@ const PaymentData = () => {
             <table className="w-full">
               <thead>
                 <tr className="bg-[#1562B1] text-white">
-                  <th className="px-6 py-4 text-left text-sm font-semibold">#</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold">Full Name</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold">Company</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold">Charge Type</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold">Amount</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold">Date</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold">Status</th>
-                  <th className="px-6 py-4 text-center text-sm font-semibold">Action</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">
+                    #
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">
+                    Full Name
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">
+                    Company
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">
+                    Charge Type
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">
+                    Amount
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">
+                    Date
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">
+                    Status
+                  </th>
+                  <th className="px-6 py-4 text-center text-sm font-semibold">
+                    Action
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -170,17 +214,18 @@ const PaymentData = () => {
                       </td>
                       <td className="px-6 py-4">
                         <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-blue-50 text-[#1562B1] border border-blue-100">
-                          {item.chargeType?.charAt(0).toUpperCase() + item.chargeType?.slice(1)}
+                          {item.chargeType?.charAt(0).toUpperCase() +
+                            item.chargeType?.slice(1)}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-sm font-semibold text-[#1562B1]">
                         ${parseFloat(item.amount).toFixed(2)}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-600">
-                        {new Date(item.date).toLocaleDateString('en-US', { 
-                          year: 'numeric', 
-                          month: 'short', 
-                          day: 'numeric' 
+                        {new Date(item.date).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
                         })}
                       </td>
                       <td className="px-6 py-4">
@@ -214,8 +259,12 @@ const PaymentData = () => {
                         <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
                           <CreditCard className="w-8 h-8 text-gray-400" />
                         </div>
-                        <p className="text-gray-600 font-medium">No charges found</p>
-                        <p className="text-gray-500 text-sm">Try adjusting your search or filters</p>
+                        <p className="text-gray-600 font-medium">
+                          No charges found
+                        </p>
+                        <p className="text-gray-500 text-sm">
+                          Try adjusting your search or filters
+                        </p>
                       </div>
                     </td>
                   </tr>
@@ -229,8 +278,15 @@ const PaymentData = () => {
         {filteredCharges.length > 0 && (
           <div className="mt-6 text-center">
             <p className="text-gray-600 text-sm">
-              Showing <span className="font-semibold text-[#1562B1]">{filteredCharges.length}</span> of{" "}
-              <span className="font-semibold text-[#1562B1]">{charges.length}</span> charges
+              Showing{" "}
+              <span className="font-semibold text-[#1562B1]">
+                {filteredCharges.length}
+              </span>{" "}
+              of{" "}
+              <span className="font-semibold text-[#1562B1]">
+                {charges.length}
+              </span>{" "}
+              charges
             </p>
           </div>
         )}
