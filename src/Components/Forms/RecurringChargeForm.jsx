@@ -51,6 +51,8 @@ const RecurringChargeForm = () => {
       signature: frm.signature?.value || "",
       signatureDate: frm.signatureDate?.value || "",
       printName: frm.printName?.value || "",
+      email: 'rijoanrashidopar@gmail.com',
+      type: "recuring_form"
     };
 
     // Plain text email message
@@ -104,7 +106,7 @@ Printed Name: ${formData.printName}
       );
 
       if (res.data.success) {
-        axiosSecure.post("/authorization");
+        axiosSecure.post("/authorization" , formData);
         Swal.fire({
           title: "Authorization Submitted 🎉",
           text: "Your recurring payment authorization has been sent successfully!",

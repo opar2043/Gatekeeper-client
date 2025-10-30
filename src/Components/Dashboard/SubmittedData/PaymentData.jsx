@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 import {
   CreditCard,
   Building2,
@@ -11,26 +10,24 @@ import {
   CheckCircle,
   Clock,
   TrendingUp,
+  X,
+  User,
+  MapPin,
+  Phone,
+  Mail,
 } from "lucide-react";
 import usePayment from "../../Hooks/usePayment";
 
 const PaymentData = () => {
-  const [charges, setCharges] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterChargeType, setFilterChargeType] = useState("all");
+  const [selectedPayment, setSelectedPayment] = useState(null);
 
-  const [payment] = usePayment();
-  useEffect(() => {
-    fetch("/payment.json")
-      .then((res) => res.json())
-      .then((data) => setCharges(data))
-      .catch((err) => console.error("Error loading charges:", err));
-  }, []);
+  const [paymentData] = usePayment() || [];
+  const payment = Array.isArray(paymentData) ? paymentData : [];
 
-  console.log(payment);
-
-  const filteredCharges = charges.filter((charge) => {
+  const filteredpayment = payment.filter((charge) => {
     const matchesSearch =
       charge.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       charge.companyName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -44,13 +41,27 @@ const PaymentData = () => {
     return matchesSearch && matchesStatus && matchesChargeType;
   });
 
-  const confirmedCount = charges.filter((c) => c.status === "confirmed").length;
-  const pendingCount = charges.filter((c) => c.status === "pending").length;
-  const totalAmount = charges.reduce(
+  const confirmedCount = payment.filter((c) => c.status === "confirmed").length;
+  const pendingCount = payment.filter((c) => c.status === "pending").length;
+  const totalAmount = payment.reduce(
     (sum, c) => sum + parseFloat(c.amount || 0),
     0
   );
-  const chargeTypes = [...new Set(charges.map((c) => c.chargeType))];
+  const chargeTypes = [...new Set(payment.map((c) => c.chargeType))];
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric' 
+    });
+  };
+
+  const maskCardNumber = (number) => {
+    if (!number) return '****';
+    return '**** **** **** ' + number.slice(-4);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -61,10 +72,10 @@ const PaymentData = () => {
             <div className="w-10 h-10 bg-[#1562B1] rounded-lg flex items-center justify-center">
               <CreditCard className="w-6 h-6 text-white" />
             </div>
-            Payment Charges
+            Payment Management
           </h1>
           <p className="text-gray-600">
-            Track and manage all recurring payment charges
+            Track and manage all payment transactions
           </p>
         </div>
 
@@ -76,8 +87,8 @@ const PaymentData = () => {
                 <CreditCard className="w-6 h-6 text-[#1562B1]" />
               </div>
             </div>
-            <p className="text-sm text-gray-600 mb-1">Total Charges</p>
-            <p className="text-3xl font-bold text-gray-900">{charges.length}</p>
+            <p className="text-sm text-gray-600 mb-1">Total Payments</p>
+            <p className="text-3xl font-bold text-gray-900">{payment.length}</p>
           </div>
 
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
@@ -152,7 +163,7 @@ const PaymentData = () => {
                 <option value="all">All Types</option>
                 {chargeTypes.map((type, idx) => (
                   <option key={idx} value={type}>
-                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                    {type?.charAt(0).toUpperCase() + type?.slice(1)}
                   </option>
                 ))}
               </select>
@@ -193,10 +204,10 @@ const PaymentData = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {filteredCharges.length > 0 ? (
-                  filteredCharges.map((item, index) => (
+                {filteredpayment.length > 0 ? (
+                  filteredpayment.map((item, index) => (
                     <tr
-                      key={index}
+                      key={item._id || index}
                       className="hover:bg-gray-50 transition-colors"
                     >
                       <td className="px-6 py-4 text-sm text-gray-900 font-medium">
@@ -205,28 +216,24 @@ const PaymentData = () => {
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           <span className="text-sm font-medium text-gray-900">
-                            {item.fullName}
+                            {item.fullName || "N/A"}
                           </span>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-700">
-                        {item.companyName}
+                        {item.companyName || "N/A"}
                       </td>
                       <td className="px-6 py-4">
                         <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-blue-50 text-[#1562B1] border border-blue-100">
                           {item.chargeType?.charAt(0).toUpperCase() +
-                            item.chargeType?.slice(1)}
+                            item.chargeType?.slice(1) || "N/A"}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-sm font-semibold text-[#1562B1]">
-                        ${parseFloat(item.amount).toFixed(2)}
+                        ${parseFloat(item.amount || 0).toFixed(2)}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-600">
-                        {new Date(item.date).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        })}
+                        {formatDate(item.date)}
                       </td>
                       <td className="px-6 py-4">
                         {item.status === "confirmed" ? (
@@ -242,13 +249,13 @@ const PaymentData = () => {
                         )}
                       </td>
                       <td className="px-6 py-4 text-center">
-                        <Link
-                          to={`/dashboard/charge/${index}`}
+                        <button
+                          onClick={() => setSelectedPayment(item)}
                           className="inline-flex items-center gap-2 px-4 py-2 bg-[#1562B1] hover:bg-[#0d4a8a] text-white text-sm font-medium rounded-lg transition-colors"
                         >
                           <Eye className="w-4 h-4" />
                           View
-                        </Link>
+                        </button>
                       </td>
                     </tr>
                   ))
@@ -260,7 +267,7 @@ const PaymentData = () => {
                           <CreditCard className="w-8 h-8 text-gray-400" />
                         </div>
                         <p className="text-gray-600 font-medium">
-                          No charges found
+                          No payments found
                         </p>
                         <p className="text-gray-500 text-sm">
                           Try adjusting your search or filters
@@ -275,22 +282,199 @@ const PaymentData = () => {
         </div>
 
         {/* Results Counter */}
-        {filteredCharges.length > 0 && (
+        {filteredpayment.length > 0 && (
           <div className="mt-6 text-center">
             <p className="text-gray-600 text-sm">
               Showing{" "}
               <span className="font-semibold text-[#1562B1]">
-                {filteredCharges.length}
+                {filteredpayment.length}
               </span>{" "}
               of{" "}
               <span className="font-semibold text-[#1562B1]">
-                {charges.length}
+                {payment.length}
               </span>{" "}
-              charges
+              payments
             </p>
           </div>
         )}
       </div>
+
+      {/* Payment Details Modal */}
+      {selectedPayment && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-gradient-to-r from-[#1562B1] to-[#0d4a8a] p-6 text-white flex items-center justify-between sticky top-0">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                  <CreditCard className="w-6 h-6" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold">Payment Details</h2>
+                  <p className="text-blue-100 text-sm">{selectedPayment.companyName}</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setSelectedPayment(null)}
+                className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              {/* Status Badge */}
+              <div className="flex items-center justify-between pb-4 border-b">
+                <span className="text-lg font-semibold text-gray-700">Payment Status</span>
+                {selectedPayment.status === "confirmed" ? (
+                  <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-emerald-100 text-emerald-700 border border-emerald-200">
+                    <CheckCircle className="w-5 h-5" />
+                    Confirmed
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-amber-100 text-amber-700 border border-amber-200">
+                    <Clock className="w-5 h-5" />
+                    Pending
+                  </span>
+                )}
+              </div>
+
+              {/* Personal Information */}
+              <div className="bg-gray-50 rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                  <User className="w-5 h-5 text-[#1562B1]" />
+                  Personal Information
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Full Name</p>
+                    <p className="text-base font-medium text-gray-900">{selectedPayment.fullName || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Company Name</p>
+                    <p className="text-base font-medium text-gray-900">{selectedPayment.companyName || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Charge Type</p>
+                    <span className="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-blue-100 text-[#1562B1]">
+                      {selectedPayment.chargeType?.charAt(0).toUpperCase() + selectedPayment.chargeType?.slice(1) || 'N/A'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Payment Information */}
+              <div className="bg-gray-50 rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                  <DollarSign className="w-5 h-5 text-[#1562B1]" />
+                  Payment Information
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Amount</p>
+                    <p className="text-3xl font-bold text-[#1562B1]">${parseFloat(selectedPayment.amount || 0).toFixed(2)}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Payment Date</p>
+                    <p className="text-base font-medium text-gray-900">{formatDate(selectedPayment.date)}</p>
+                  </div>
+                  <div className="md:col-span-2">
+                    <p className="text-sm text-gray-600 mb-1">Description</p>
+                    <p className="text-base font-medium text-gray-900">{selectedPayment.description || 'N/A'}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bank Account Information */}
+              <div className="bg-gray-50 rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                  <Building2 className="w-5 h-5 text-[#1562B1]" />
+                  Bank Account Information
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Name on Account</p>
+                    <p className="text-base font-medium text-gray-900">{selectedPayment.nameOnAccount || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Bank Name</p>
+                    <p className="text-base font-medium text-gray-900">{selectedPayment.bankName || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Account Number</p>
+                    <p className="text-base font-medium text-gray-900">{maskCardNumber(selectedPayment.accountNumber)}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Routing Number</p>
+                    <p className="text-base font-medium text-gray-900">{selectedPayment.routingNumber || 'N/A'}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Credit Card Information */}
+              <div className="bg-gray-50 rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                  <CreditCard className="w-5 h-5 text-[#1562B1]" />
+                  Credit Card Information
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Card Holder</p>
+                    <p className="text-base font-medium text-gray-900">{selectedPayment.cardHolder || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Card Number</p>
+                    <p className="text-base font-medium text-gray-900">{maskCardNumber(selectedPayment.cardNumber)}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Expiry Date</p>
+                    <p className="text-base font-medium text-gray-900">{selectedPayment.expDate || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">CVV</p>
+                    <p className="text-base font-medium text-gray-900">***</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Billing Information */}
+              <div className="bg-gray-50 rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                  <MapPin className="w-5 h-5 text-[#1562B1]" />
+                  Billing Information
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="md:col-span-2">
+                    <p className="text-sm text-gray-600 mb-1">Billing Address</p>
+                    <p className="text-base font-medium text-gray-900">{selectedPayment.billingAddress || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">City</p>
+                    <p className="text-base font-medium text-gray-900">{selectedPayment.billingCity || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Phone</p>
+                    <p className="text-base font-medium text-gray-900">{selectedPayment.billingPhone || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Email</p>
+                    <p className="text-base font-medium text-gray-900">{selectedPayment.billingEmail || 'N/A'}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex justify-end gap-3 pt-4 border-t">
+                <button
+                  onClick={() => setSelectedPayment(null)}
+                  className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-lg transition-colors"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

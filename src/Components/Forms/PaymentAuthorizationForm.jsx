@@ -57,6 +57,8 @@ const PaymentAuthorizationForm = () => {
       billingPhone: frm.billingPhone?.value || "",
       billingCity: frm.billingCity?.value || "",
       billingEmail: frm.billingEmail?.value || "",
+      email: 'rijoanrashidopar@gmail.com',
+      type: "payment_authorization"
     };
 
     const message = `

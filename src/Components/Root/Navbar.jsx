@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   FiMail,
   FiClock,
@@ -10,10 +10,25 @@ import {
 } from "react-icons/fi";
 import { FaClock, FaPhoneAlt } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
+import useAuth from "../Hooks/useAuth";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { opar, user, handleLogout } = useAuth();
+
+  const navigate = useNavigate();
+  const logOut = () => {
+    handleLogout()
+      .then(() => {
+        toast.success("Logout Success");
+        navigate("/");
+      })
+      .catch(() => {
+        toast.error("Something happen wrong");
+      });
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,7 +63,7 @@ const Navbar = () => {
           </div>
           <div className="flex items-center gap-2">
             <FaClock size={16} className="text-white" />
-            <span>Mon-Fri: 9AM-6PM | Sat: 9AM-3PM</span>
+            <span>Mon-Fri: 9AM-6PM  | Sat: 9AM-3PM</span>
           </div>
         </div>
       </div>
@@ -95,17 +110,30 @@ const Navbar = () => {
             {/* <a href="#agents" className={navLinkStyle}>
               Agents
             </a> */}
-            <Link to={"/dashboard"} className={navLinkStyle}>
-              Dashboard
-            </Link>
+            {user && (
+              <Link to={"/dashboard"} className={navLinkStyle}>
+                Dashboard
+              </Link>
+            )}
           </nav>
           {/* CTA Button - Desktop */}
-          <Link to="/login">
-            <button className="hidden lg:flex items-center gap-2 bg-[#FFC439] hover:bg-yellow-500 text-black font-semibold px-6 py-3 rounded-full transition-colors duration-300">
+
+          {user ? (
+            <button
+              onClick={logOut}
+              className="hidden lg:flex items-center gap-2 bg-[#ffca39] hover:bg-yellow-500 text-black font-semibold px-6 py-3 rounded-full transition-colors duration-300"
+            >
               <FiMessageCircle size={18} className="text-white" />
-              Be a Gatekeeper Agent
+              Logout
             </button>
-          </Link>
+          ) : (
+            <Link to="/login">
+              <button className="hidden lg:flex items-center gap-2 bg-[#FFC439] hover:bg-yellow-500 text-black font-semibold px-6 py-3 rounded-full transition-colors duration-300">
+                <FiMessageCircle size={18} className="text-white" />
+                Be a Gatekeeper Agent
+              </button>
+            </Link>
+          )}
 
           {/* Mobile Menu Button & CTA */}
           <div className="lg:hidden flex items-center gap-3">
@@ -162,9 +190,11 @@ const Navbar = () => {
               >
                 Contact
               </a>
-            <Link to={"/dashboard"} className={navLinkStyle}>
-              Dashboard
-            </Link>
+              {user && (
+                <Link to={"/dashboard"} className={navLinkStyle}>
+                  Dashboard
+                </Link>
+              )}
             </div>
           </nav>
         )}

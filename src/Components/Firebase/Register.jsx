@@ -1,51 +1,53 @@
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
-// import useAuth from "../Hooks/useAuth";
 import useAxios from "../Hooks/useAxios";
-// import toast from "react-hot-toast";
-// import Swal from "sweetalert2";
-// import Lottie from "lottie-react";
-// import registerAnimation from "../../assets/register_animation.json";
+import useAuth from "../Hooks/useAuth";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 const Register = () => {
-//   const { handleRegister } = useAuth();
+  const { handleRegister } = useAuth();
+  const navigate = useNavigate();
+  const axiosSecure = useAxios();
 
-//   const navigate = useNavigate();
-//   const axiosSecure = useAxios()
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    const name = e.target.name.value;
+    const email = e.target.email.value;
+    const password = e.target.password.value;
 
-//   function handleSignUp(e) {
-//     e.preventDefault();
-//     const name = e.target.name.value;
-//     const email = e.target.email.value;
-//     const pass = e.target.pass.value;
+    const userObj = {
+      name,
+      email,
+      role: "customer",
+    };
 
-//     const userObj = {
-//       name,
-//       email,
-//       pass,
-//       role: "customer",
-//     };
-
-    // handleRegister(email, pass)
-    //   .then((userCredential) => {
-    //     axiosSecure.post("/users", userObj).then(() => {
-    //       toast.success("You have Created an Account");
-    //       navigate("/");
-    //     });
-    //   })
-    //   .catch(() => {
-    //     Swal.fire({ title: "Something went wrong", icon: "error" });
-    //   });
-//   }
+    handleRegister(email, password)
+      .then((userCredential) => {
+        // User created in Firebase
+        axiosSecure.post("/users", userObj).then(() => {
+          toast.success("Account created successfully!");
+          navigate("/");
+        });
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: "Registration Failed",
+          text: error.message || "Something went wrong.",
+          icon: "error",
+          confirmButtonColor: "#EAB308",
+        });
+      });
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-yellow-50 px-4 py-10">
       <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 bg-white rounded-2xl shadow-2xl overflow-hidden">
-        {/* Left Side - Animation + Branding */}
+        {/* Left Side - Branding / Illustration */}
         <div className="hidden md:flex flex-col items-center justify-center bg-[#EAB308] p-8 relative overflow-hidden">
           <div className="absolute inset-0 bg-white/10 backdrop-blur-md" />
           <div className="relative z-10 text-center text-black">
-            {/* <Lottie animationData={registerAnimation} className="w-full h-80 mb-6" /> */}
             <h2 className="text-3xl font-bold mb-3">Join Gatekeeper</h2>
             <p className="text-gray-800 max-w-sm mx-auto">
               Start managing your business securely and efficiently.
@@ -62,7 +64,7 @@ const Register = () => {
             Join us and start your journey!
           </p>
 
-          <form onSubmit={'handleSignUp'} className="space-y-5">
+          <form onSubmit={handleSignUp} className="space-y-5">
             {/* Full Name */}
             <div className="relative">
               <FaUser className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />

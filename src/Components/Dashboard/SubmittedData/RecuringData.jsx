@@ -1,94 +1,11 @@
 import React, { useState } from 'react';
 import { CreditCard, Calendar, DollarSign, Building2, CheckCircle2, Clock, XCircle, Eye, X } from 'lucide-react';
+import useAuthorization from '../../Hooks/useAuthorization';
 
 const RecurringData = () => {
-  const [payments] = useState([
-    {
-      "id": 1,
-      "fullName": "Rijoan Rashid",
-      "companyName": "TechNova Ltd.",
-      "amount": "4500",
-      "date": "2025-10-28",
-      "paymentFor": "Monthly Hosting Service",
-      "cardType": "Visa",
-      "cardholderName": "Rijoan Rashid",
-      "accountNumber": "4111111111111111",
-      "expDate": "2026-09",
-      "cvv": "123",
-      "signature": "R. Rashid",
-      "signatureDate": "2025-10-28",
-      "printName": "Rijoan Rashid",
-      "status": "pending"
-    },
-    {
-      "id": 2,
-      "fullName": "Maisha Ahmed",
-      "companyName": "UrbanStyle Fashions",
-      "amount": "9000",
-      "date": "2025-10-27",
-      "paymentFor": "Website Maintenance",
-      "cardType": "MasterCard",
-      "cardholderName": "Maisha Ahmed",
-      "accountNumber": "5500000000000004",
-      "expDate": "2027-03",
-      "cvv": "456",
-      "signature": "M. Ahmed",
-      "signatureDate": "2025-10-27",
-      "printName": "Maisha Ahmed",
-      "status": "confirm"
-    },
-    {
-      "id": 3,
-      "fullName": "Tanvir Hassan",
-      "companyName": "GreenLeaf Organics",
-      "amount": "12500",
-      "date": "2025-10-26",
-      "paymentFor": "Digital Marketing Package",
-      "cardType": "Visa",
-      "cardholderName": "Tanvir Hassan",
-      "accountNumber": "4532015112830366",
-      "expDate": "2026-12",
-      "cvv": "789",
-      "signature": "T. Hassan",
-      "signatureDate": "2025-10-26",
-      "printName": "Tanvir Hassan",
-      "status": "confirm"
-    },
-    {
-      "id": 4,
-      "fullName": "Sabrina Karim",
-      "companyName": "EduBright Academy",
-      "amount": "6800",
-      "date": "2025-10-28",
-      "paymentFor": "Learning Management System",
-      "cardType": "American Express",
-      "cardholderName": "Sabrina Karim",
-      "accountNumber": "378282246310005",
-      "expDate": "2028-06",
-      "cvv": "234",
-      "signature": "S. Karim",
-      "signatureDate": "2025-10-28",
-      "printName": "Sabrina Karim",
-      "status": "pending"
-    },
-    {
-      "id": 5,
-      "fullName": "Fahim Rahman",
-      "companyName": "Apex Solutions Inc.",
-      "amount": "15000",
-      "date": "2025-10-25",
-      "paymentFor": "Cloud Infrastructure",
-      "cardType": "Visa",
-      "cardholderName": "Fahim Rahman",
-      "accountNumber": "4916338506082832",
-      "expDate": "2027-11",
-      "cvv": "567",
-      "signature": "F. Rahman",
-      "signatureDate": "2025-10-25",
-      "printName": "Fahim Rahman",
-      "status": "confirm"
-    }
-  ]);
+  // Fixed: Ensure authorization is always an array
+  const [authorizationData] = useAuthorization() || [];
+  const payments = Array.isArray(authorizationData) ? authorizationData : [];
 
   const [selectedPayment, setSelectedPayment] = useState(null);
 
@@ -111,10 +28,12 @@ const RecurringData = () => {
   };
 
   const maskCardNumber = (number) => {
+    if (!number) return '****';
     return '**** **** **** ' + number.slice(-4);
   };
 
   const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
     return new Date(dateString).toLocaleDateString('en-US', { 
       year: 'numeric', 
       month: 'short', 
@@ -156,7 +75,7 @@ const RecurringData = () => {
             <table className="w-full">
               <thead className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
                 <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold">ID</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">#</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Full Name</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Company</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Amount</th>
@@ -167,40 +86,54 @@ const RecurringData = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {payments.map((payment) => (
-                  <tr key={payment.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                      #{payment.id}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">
-                      {payment.fullName}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
-                      {payment.companyName}
-                    </td>
-                    <td className="px-6 py-4 text-sm font-semibold text-indigo-600">
-                      ৳{parseInt(payment.amount).toLocaleString()}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
-                      {formatDate(payment.date)}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
-                      {payment.paymentFor}
-                    </td>
-                    <td className="px-6 py-4">
-                      {getStatusBadge(payment.status)}
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      <button
-                        onClick={() => setSelectedPayment(payment)}
-                        className="inline-flex items-center gap-1 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors"
-                      >
-                        <Eye className="w-4 h-4" />
-                        View
-                      </button>
+                {payments.length > 0 ? (
+                  payments.map((payment, index) => (
+                    <tr key={payment._id || index} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                        #{index + 1}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-900">
+                        {payment.fullName || 'N/A'}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-600">
+                        {payment.companyName || 'N/A'}
+                      </td>
+                      <td className="px-6 py-4 text-sm font-semibold text-indigo-600">
+                        ৳{payment.amount ? parseInt(payment.amount).toLocaleString() : '0'}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-600">
+                        {formatDate(payment.date)}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-600">
+                        {payment.paymentFor || 'N/A'}
+                      </td>
+                      <td className="px-6 py-4">
+                        {getStatusBadge(payment.status)}
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <button
+                          onClick={() => setSelectedPayment(payment)}
+                          className="inline-flex items-center gap-1 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors"
+                        >
+                          <Eye className="w-4 h-4" />
+                          View
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="8" className="px-6 py-12 text-center">
+                      <div className="flex flex-col items-center gap-3">
+                        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                          <CreditCard className="w-8 h-8 text-gray-400" />
+                        </div>
+                        <p className="text-gray-600 font-medium">No payments found</p>
+                        <p className="text-gray-500 text-sm">No recurring payments available</p>
+                      </div>
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -234,11 +167,11 @@ const RecurringData = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-600">Full Name</p>
-                    <p className="text-base font-medium text-gray-900">{selectedPayment.fullName}</p>
+                    <p className="text-base font-medium text-gray-900">{selectedPayment.fullName || 'N/A'}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Company Name</p>
-                    <p className="text-base font-medium text-gray-900">{selectedPayment.companyName}</p>
+                    <p className="text-base font-medium text-gray-900">{selectedPayment.companyName || 'N/A'}</p>
                   </div>
                 </div>
               </div>
@@ -249,7 +182,9 @@ const RecurringData = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-600">Amount</p>
-                    <p className="text-2xl font-bold text-indigo-600">৳{parseInt(selectedPayment.amount).toLocaleString()}</p>
+                    <p className="text-2xl font-bold text-indigo-600">
+                      $ {selectedPayment.amount ? parseInt(selectedPayment.amount).toLocaleString() : '0'}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Payment Date</p>
@@ -257,7 +192,7 @@ const RecurringData = () => {
                   </div>
                   <div className="md:col-span-2">
                     <p className="text-sm text-gray-600">Payment For</p>
-                    <p className="text-base font-medium text-gray-900">{selectedPayment.paymentFor}</p>
+                    <p className="text-base font-medium text-gray-900">{selectedPayment.paymentFor || 'N/A'}</p>
                   </div>
                 </div>
               </div>
@@ -270,12 +205,12 @@ const RecurringData = () => {
                     <p className="text-sm text-gray-600">Card Type</p>
                     <div className="flex items-center gap-2 mt-1">
                       <CreditCard className="w-5 h-5 text-indigo-600" />
-                      <p className="text-base font-medium text-gray-900">{selectedPayment.cardType}</p>
+                      <p className="text-base font-medium text-gray-900">{selectedPayment.cardType || 'N/A'}</p>
                     </div>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Cardholder Name</p>
-                    <p className="text-base font-medium text-gray-900">{selectedPayment.cardholderName}</p>
+                    <p className="text-base font-medium text-gray-900">{selectedPayment.cardholderName || 'N/A'}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Card Number</p>
@@ -283,7 +218,7 @@ const RecurringData = () => {
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Expiry Date</p>
-                    <p className="text-base font-medium text-gray-900">{selectedPayment.expDate}</p>
+                    <p className="text-base font-medium text-gray-900">{selectedPayment.expDate || 'N/A'}</p>
                   </div>
                 </div>
               </div>
@@ -294,7 +229,7 @@ const RecurringData = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-600">Signature</p>
-                    <p className="text-xl font-cursive italic text-indigo-600">{selectedPayment.signature}</p>
+                    <p className="text-xl font-cursive italic text-indigo-600">{selectedPayment.signature || 'N/A'}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Signature Date</p>
@@ -302,7 +237,7 @@ const RecurringData = () => {
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Print Name</p>
-                    <p className="text-base font-medium text-gray-900">{selectedPayment.printName}</p>
+                    <p className="text-base font-medium text-gray-900">{selectedPayment.printName || 'N/A'}</p>
                   </div>
                 </div>
               </div>

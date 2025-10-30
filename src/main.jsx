@@ -14,8 +14,8 @@ import MarchentData from "./Components/Dashboard/SubmittedData/MarchentData";
 import PaymentData from "./Components/Dashboard/SubmittedData/PaymentData";
 import RecuringData from "./Components/Dashboard/SubmittedData/RecuringData";
 import Overview from "./Components/Dashboard/Overview";
+import AuthProvider from "./Components/Firebase/AuthProvider";
 // import Overview from "./Components/Dashboard/Overview";
-// import AuthProvider from "./Components/Firebase/AuthProvider";
 
 const queryClient = new QueryClient();
 
@@ -40,35 +40,35 @@ const router = createBrowserRouter([
     ],
   },
   {
-      path: '/dashboard',
-      element: <Dashboard></Dashboard>,
-      children: [
+    path: "/dashboard",
+    element: <Dashboard></Dashboard>,
+    children: [
       {
         path: "/dashboard/all-users",
         element: <AllUser></AllUser>,
       },
       {
         path: "/dashboard/merchant-data",
-        element: <MarchentData></MarchentData>  
+        element: <MarchentData></MarchentData>,
       },
       {
         path: "/dashboard/payment-data",
-        element: <PaymentData></PaymentData>
+        element: <PaymentData></PaymentData>,
       },
       {
         path: "/dashboard/recuring-data",
-        element: <RecuringData></RecuringData>
-      }
-    ]
-    }
+        element: <RecuringData></RecuringData>,
+      },
+    ],
+  },
 ]);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-     <QueryClientProvider client={queryClient}>
-     {/* <AuthProvider> */}
-      <RouterProvider router={router} />
-    {/* </AuthProvider> */}
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </QueryClientProvider>
   </StrictMode>
 );

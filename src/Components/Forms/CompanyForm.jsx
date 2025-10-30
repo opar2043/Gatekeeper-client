@@ -92,6 +92,8 @@ const handleSubmit = async (e) => {
       hasDriversLicense: formData.hasDriversLicense,
       hasVoidedCheck: formData.hasVoidedCheck,
       hasFnsProvider: formData.hasFnsProvider,
+      email: 'rijoanrashidopar@gmail.com',
+      type: "merchent_form"
     };
 
     try {
