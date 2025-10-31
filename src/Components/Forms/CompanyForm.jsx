@@ -3,6 +3,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import useAxios from "../Hooks/useAxios";
 import toast from "react-hot-toast";
+import useAuth from "../Hooks/useAuth";
 const CompanyForm = () => {
   const [formData, setFormData] = useState({
     // Business Information
@@ -67,7 +68,7 @@ const CompanyForm = () => {
   };
 
   const axiosSecure = useAxios();
-
+  const {user} = useAuth()
 const handleSubmit = async (e) => {
     e.preventDefault();
     const frm = e.target;
@@ -92,7 +93,7 @@ const handleSubmit = async (e) => {
       hasDriversLicense: formData.hasDriversLicense,
       hasVoidedCheck: formData.hasVoidedCheck,
       hasFnsProvider: formData.hasFnsProvider,
-      email: 'rijoanrashidopar@gmail.com',
+      email: user?.email,
       type: "merchent_form"
     };
 

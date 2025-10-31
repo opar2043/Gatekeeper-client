@@ -15,6 +15,8 @@ import PaymentData from "./Components/Dashboard/SubmittedData/PaymentData";
 import RecuringData from "./Components/Dashboard/SubmittedData/RecuringData";
 import Overview from "./Components/Dashboard/Overview";
 import AuthProvider from "./Components/Firebase/AuthProvider";
+import MarchantSubmission from "./Components/Dashboard/UserSubmission/MarchantSubmission";
+import PaymentSubmission from "./Components/Dashboard/UserSubmission/PaymentSubmission";
 // import Overview from "./Components/Dashboard/Overview";
 
 const queryClient = new QueryClient();
@@ -58,6 +60,14 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/recuring-data",
         element: <RecuringData></RecuringData>,
+      },
+      {
+        path: "/dashboard/user-merchant-data",
+        element: <MarchantSubmission></MarchantSubmission>
+      },
+      {
+        path: "/dashboard/user-payment-data",
+        element: <PaymentSubmission></PaymentSubmission>
       },
     ],
   },

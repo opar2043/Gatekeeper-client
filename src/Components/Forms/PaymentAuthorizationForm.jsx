@@ -3,6 +3,7 @@ import { HiOutlineCreditCard, HiOutlineBanknotes, HiOutlineHome, HiOutlineUserCi
 import Swal from "sweetalert2";
 import axios from "axios";
 import useAxios from "../Hooks/useAxios";
+import useAuth from "../Hooks/useAuth";
 
 const PaymentAuthorizationForm = () => {
   const [formData, setFormData] = useState({
@@ -28,6 +29,7 @@ const PaymentAuthorizationForm = () => {
   });
 
   const axiosSecure = useAxios();
+  const {user} = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,7 +59,7 @@ const PaymentAuthorizationForm = () => {
       billingPhone: frm.billingPhone?.value || "",
       billingCity: frm.billingCity?.value || "",
       billingEmail: frm.billingEmail?.value || "",
-      email: 'rijoanrashidopar@gmail.com',
+      email: user?.email,
       type: "payment_authorization"
     };
 

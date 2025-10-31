@@ -8,6 +8,7 @@ import {
 } from "react-icons/fa";
 import Swal from "sweetalert2";
 import useAxios from "../Hooks/useAxios";
+import useAuth from "../Hooks/useAuth";
 
 const RecurringChargeForm = () => {
   const [formData, setFormData] = useState({
@@ -24,6 +25,8 @@ const RecurringChargeForm = () => {
     signature: "",
     printName: "",
   });
+
+  const {user} = useAuth()
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,7 +54,7 @@ const RecurringChargeForm = () => {
       signature: frm.signature?.value || "",
       signatureDate: frm.signatureDate?.value || "",
       printName: frm.printName?.value || "",
-      email: 'rijoanrashidopar@gmail.com',
+      email: user?.email,
       type: "recuring_form"
     };
 

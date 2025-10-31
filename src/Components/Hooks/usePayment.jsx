@@ -4,7 +4,7 @@ import useAxios from "./useAxios";
 
 const usePayment = () => {
   const axiosSecure = useAxios()
-  const {data: payment ,refetch,isLoading} = useQuery({
+  const {data: payment , refetch,isLoading} = useQuery({
     queryKey: ["payments"],
     queryFn: async () => {
       const res = await axiosSecure.get("/payment");

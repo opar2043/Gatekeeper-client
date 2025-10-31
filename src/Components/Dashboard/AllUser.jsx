@@ -1,42 +1,81 @@
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import useUser from "../Hooks/useUser";
+import Swal from "sweetalert2";
+import useAxios from "../Hooks/useAxios";
 
 const AllUser = () => {
-  const [users, setUsers] = useState([]);
+  // const [users, setUsers] = useState([]);
 
   // Fetch users from local JSON
+  // useEffect(() => {
+  //   fetch("/user.json")
+  //     .then((res) => res.json())
+  //     .then((data) => setUsers(data))
+  //     .catch((error) => console.error("Error loading users:", error));
+  // }, []);
+
+  
+
+
+
+  const [users, refetch] = useUser() || [];
+  const axiosSecure = useAxios();
+  const [localUsers, setLocalUsers] = useState([]);
+    // Keep a local copy so we can update UI instantly
   useEffect(() => {
-    fetch("/user.json")
-      .then((res) => res.json())
-      .then((data) => setUsers(data))
-      .catch((error) => console.error("Error loading users:", error));
-  }, []);
+    if (users) {
+      setLocalUsers(users);
+    }
+  }, [users]);
+
 
   // Handle role change (Admin <-> Agent)
-  const handleRoleChange = (email) => {
-    const updatedUsers = users.map((user) => {
-      if (user.email === email) {
-        const newRole = user.role === "admin" ? "agent" : "admin";
-        toast.success(`${user.name} is now ${newRole.toUpperCase()}!`, {
-          iconTheme: {
-            secondary: "#fff",
-          },
+function handleRoleUpdate(id) {
+  const selectedUser = users.find((u) => u._id === id);
+  const currentRole = selectedUser?.role || "customer";
+  const newRole = currentRole === "customer" ? "admin" : "customer";
+
+  Swal.fire({
+    title: "Are you sure?",
+    text: `Change role to ${newRole}?`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      axiosSecure
+        .patch(`/users/${id}`, { role: newRole })
+        .then(() => {
+          toast.success(`User role updated to ${newRole}`);
+          refetch();
+          setLocalUsers((prev) =>
+            prev.map((user) =>
+              user._id === id ? { ...user, role: newRole } : user
+            )
+          );
+        })
+        .catch(() => {
+          Swal.fire({
+            title: "Something went wrong",
+            icon: "error",
+          });
         });
-        return { ...user, role: newRole };
-      }
-      return user;
-    });
-    setUsers(updatedUsers);
-  };
+    }
+  });
+}
+
+
+  console.log(users);
 
   return (
     <div className="p-6">
       {/* Toast container */}
       <Toaster position="top-center" reverseOrder={false} />
 
-      <h2 className="text-2xl font-semibold mb-4 text-[#1562B1]">
-        All Users
-      </h2>
+      <h2 className="text-2xl font-semibold mb-4 text-[#1562B1]">All Users</h2>
 
       <div className="overflow-x-auto bg-white shadow rounded-lg">
         <table className="min-w-full table-auto border border-gray-200">
@@ -50,31 +89,32 @@ const AllUser = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user, index) => (
-              <tr
-                key={user.email}
-                className="text-center hover:bg-blue-50 transition-all"
-              >
-                <td className="px-4 py-2 border">{index + 1}</td>
-                <td className="px-4 py-2 border font-medium">{user.name}</td>
-                <td className="px-4 py-2 border">{user.email}</td>
-                <td
-                  className={`px-4 py-2 border font-semibold ${
-                    user.role === "admin" ? "text-green-600" : "text-blue-600"
-                  }`}
+            {users &&
+              users.map((user, index) => (
+                <tr
+                  key={user.email}
+                  className="text-center hover:bg-blue-50 transition-all"
                 >
-                  {user.role}
-                </td>
-                <td className="px-4 py-2 border">
-                  <button
-                    onClick={() => handleRoleChange(user.email)}
-                    className="px-3 py-1 bg-[#1562B1] text-white rounded hover:bg-blue-700 transition-all"
+                  <td className="px-4 py-2 border">{index + 1}</td>
+                  <td className="px-4 py-2 border font-medium">{user.name}</td>
+                  <td className="px-4 py-2 border">{user.email}</td>
+                  <td
+                    className={`px-4 py-2 border font-semibold ${
+                      user.role === "admin" ? "text-green-600" : "text-blue-600"
+                    }`}
                   >
-                    Switch to {user.role === "admin" ? "Agent" : "Admin"}
-                  </button>
-                </td>
-              </tr>
-            ))}
+                    {user.role}
+                  </td>
+                  <td className="px-4 py-2 border">
+                    <button
+                      onClick={() => handleRoleUpdate(user._id)}
+                      className="px-3 py-1 bg-[#1562B1] text-white rounded hover:bg-blue-700 transition-all"
+                    >
+                      Switch to <span className="font-semibold">{user.role === "admin" ? "Agent" : "Admin"}</span>
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
