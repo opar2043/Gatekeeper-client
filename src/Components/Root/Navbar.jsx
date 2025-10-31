@@ -7,6 +7,7 @@ import {
   FiMenu,
   FiX,
   FiHome,
+  FiUser,
 } from "react-icons/fi";
 import { FaClock, FaPhoneAlt } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
@@ -123,7 +124,7 @@ const Navbar = () => {
               onClick={logOut}
               className="hidden lg:flex items-center gap-2 bg-[#ffca39] hover:bg-yellow-500 text-black font-semibold px-6 py-3 rounded-full transition-colors duration-300"
             >
-              <FiMessageCircle size={18} className="text-white" />
+              <FiUser size={18} className="" />
               Logout
             </button>
           ) : (

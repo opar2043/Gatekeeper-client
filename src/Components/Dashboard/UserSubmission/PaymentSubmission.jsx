@@ -37,7 +37,7 @@ const PaymentSubmission = () => {
         {/* Header Section */}
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-slate-900 mb-2 flex items-center gap-3">
-            {user?.email}
+            Payments Authorization — {user?.email || "N/A"}
           </h1>
           <p className="text-gray-600 text-lg">
             All Payment Submissions for this account

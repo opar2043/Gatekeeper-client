@@ -17,6 +17,7 @@ import Overview from "./Components/Dashboard/Overview";
 import AuthProvider from "./Components/Firebase/AuthProvider";
 import MarchantSubmission from "./Components/Dashboard/UserSubmission/MarchantSubmission";
 import PaymentSubmission from "./Components/Dashboard/UserSubmission/PaymentSubmission";
+import RecuringSubmission from "./Components/Dashboard/UserSubmission/RecuringSubmission";
 // import Overview from "./Components/Dashboard/Overview";
 
 const queryClient = new QueryClient();
@@ -68,6 +69,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/user-payment-data",
         element: <PaymentSubmission></PaymentSubmission>
+      },
+      {
+        path: "/dashboard/user-recuring-data",
+        element: <RecuringSubmission></RecuringSubmission>
       },
     ],
   },

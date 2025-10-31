@@ -10,11 +10,7 @@ import {
   Phone,
   Building,
   FileText,
-  MapPin,
-  Briefcase,
-  Calendar,
-  IdCard,
-  Hash,
+  CreditCard,
 } from "lucide-react";
 import useMarchent from "../../Hooks/useMarchent";
 import useAuth from "../../Hooks/useAuth";
@@ -22,10 +18,10 @@ import useAuth from "../../Hooks/useAuth";
 const MarchantSubmission = () => {
   const [selectedMerchant, setSelectedMerchant] = useState(null);
   const [marchants] = useMarchent() || [];
-  const merchants = Array.isArray(marchants) ? marchants : [];
   const { user } = useAuth();
 
-  // Filter merchants for current user safely
+  const merchants = Array.isArray(marchants) ? marchants : [];
+
   const findForm =
     user?.email && Array.isArray(marchants)
       ? marchants.filter((mar) => mar.email === user.email)
@@ -52,7 +48,7 @@ const MarchantSubmission = () => {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-slate-900 mb-2 flex items-center gap-3">
-            {user?.email || "No user email found"}
+            Merchants — {user?.email || "N/A"}
           </h1>
           <p className="text-gray-600 text-lg">
             All Merchant Submissions for this Login Email
@@ -155,131 +151,150 @@ const MarchantSubmission = () => {
           </div>
         </div>
 
-        {/* Results Counter */}
-        {findForm?.length > 0 && (
-          <div className="mt-6 text-center">
-            <p className="text-gray-600">
-              Showing{" "}
-              <span className="font-semibold text-blue-600">{findForm.length}</span> of{" "}
-              <span className="font-semibold text-blue-600">{merchants.length}</span>{" "}
-              merchants
-            </p>
+        {/* Modal */}
+        {selectedMerchant && (
+          <div
+            id="modal-bg"
+            onClick={handleCloseModal}
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+          >
+            <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-6 text-white flex items-center justify-between sticky top-0 z-10">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                    <Store className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold">Merchant Details</h2>
+                    <p className="text-blue-100 text-sm">{selectedMerchant.logoName}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setSelectedMerchant(null)}
+                  className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="p-6 space-y-6">
+                {/* Status Badge */}
+                <div className="flex items-center justify-between pb-4 border-b">
+                  <span className="text-lg font-semibold text-gray-700">Account Status</span>
+                  {selectedMerchant.status === "confirmed" ? (
+                    <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-green-100 text-green-700 border border-green-200">
+                      <CheckCircle className="w-5 h-5" />
+                      Confirmed
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-yellow-100 text-yellow-700 border border-yellow-200">
+                      <Clock className="w-5 h-5" />
+                      Pending
+                    </span>
+                  )}
+                </div>
+
+                {/* Business Information */}
+                <InfoSection
+                  title="Business Information"
+                  icon={<Building className="w-5 h-5 text-blue-600" />}
+                  infos={[
+                    { label: "Business Name", value: selectedMerchant.logoName },
+                    { label: "Date Established", value: formatDate(selectedMerchant.dateEstablished) },
+                    { label: "Business Type", value: selectedMerchant.businessType },
+                    { label: "Taxpayer ID", value: selectedMerchant.taxpayerId },
+                    { label: "Business Email", value: selectedMerchant.businessEmail },
+                    { label: "Business Website", value: selectedMerchant.businessWebsite },
+                  ]}
+                />
+
+                {/* Owner Information */}
+                <InfoSection
+                  title="Owner Information"
+                  icon={<User className="w-5 h-5 text-blue-600" />}
+                  infos={[
+                    { label: "Full Name", value: `${selectedMerchant.firstName} ${selectedMerchant.lastName}` },
+                    { label: "Title", value: selectedMerchant.titleName },
+                    { label: "Owner Email", value: selectedMerchant.ownerEmail },
+                    { label: "Cell Phone", value: selectedMerchant.cellPhone },
+                  ]}
+                />
+
+                {/* Banking Information */}
+                <InfoSection
+                  title="Banking Information"
+                  icon={<CreditCard className="w-5 h-5 text-blue-600" />}
+                  infos={[
+                    { label: "Bank Name", value: selectedMerchant.bankName },
+                    { label: "Account Number", value: selectedMerchant.accountNumber },
+                    { label: "Routing Number", value: selectedMerchant.routingNumber },
+                  ]}
+                />
+
+                {/* Contact Information */}
+                <InfoSection
+                  title="Emergency Contact"
+                  icon={<Phone className="w-5 h-5 text-blue-600" />}
+                  infos={[
+                    { label: "Contact Name", value: selectedMerchant.contactName },
+                    { label: "Contact Phone", value: selectedMerchant.contactPhone },
+                  ]}
+                />
+
+                {/* Documents */}
+                <div className="bg-gray-50 rounded-lg p-6">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                    <FileText className="w-5 h-5 text-blue-600" />
+                    Document Verification
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <DocumentStatus label="Driver's License" status={selectedMerchant.hasDriversLicense} />
+                    <DocumentStatus label="Voided Check" status={selectedMerchant.hasVoidedCheck} />
+                    <DocumentStatus label="FNS Provider" status={selectedMerchant.hasFnsProvider} />
+                  </div>
+                </div>
+
+                {/* Close Button */}
+                <div className="flex justify-end gap-3 pt-4 border-t">
+                  <button
+                    onClick={() => setSelectedMerchant(null)}
+                    className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-lg transition-colors"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>
-
-      {/* Modal */}
-      {selectedMerchant && (
-        <div
-          id="modal-bg"
-          onClick={handleCloseModal}
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
-        >
-          <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-6 text-white flex items-center justify-between sticky top-0 z-10">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
-                  <Store className="w-6 h-6" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold">Merchant Details</h2>
-                  <p className="text-blue-100 text-sm">{selectedMerchant.logoName}</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setSelectedMerchant(null)}
-                className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-
-            {/* Body */}
-            <div className="p-6 space-y-6">
-              {/* Status */}
-              <div className="flex items-center justify-between pb-4 border-b">
-                <span className="text-lg font-semibold text-gray-700">Account Status</span>
-                {selectedMerchant.status === "confirmed" ? (
-                  <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-green-100 text-green-700 border border-green-200">
-                    <CheckCircle className="w-5 h-5" />
-                    Confirmed
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-yellow-100 text-yellow-700 border border-yellow-200">
-                    <Clock className="w-5 h-5" />
-                    Pending
-                  </span>
-                )}
-              </div>
-
-              {/* Business Info */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                  <Building className="w-5 h-5 text-blue-600" />
-                  Business Information
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Info label="Business Name" value={selectedMerchant.logoName} />
-                  <Info
-                    label="Date Established"
-                    value={formatDate(selectedMerchant.dateEstablished)}
-                  />
-                  <Info label="Title Name" value={selectedMerchant.titleName} />
-                  <Info label="Taxpayer ID" value={selectedMerchant.taxpayerId} />
-                  <Info
-                    label="Private Business No."
-                    value={selectedMerchant.businessPrivateNumber}
-                  />
-                  <Info label="Business Type" value={selectedMerchant.businessType} />
-                  <Info
-                    label="Other Business Type"
-                    value={selectedMerchant.otherBusinessType}
-                  />
-                  <Info
-                    label="Physical Address"
-                    value={selectedMerchant.physicalAddress}
-                  />
-                </div>
-              </div>
-
-              {/* Owner Info */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                  <User className="w-5 h-5 text-blue-600" />
-                  Owner Information
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Info label="First Name" value={selectedMerchant.firstName} />
-                  <Info label="Last Name" value={selectedMerchant.lastName} />
-                  <Info label="Email" value={selectedMerchant.businessEmail} />
-                  <Info label="Phone" value={selectedMerchant.businessPhone} />
-                  <Info label="Role" value={selectedMerchant.role || "Merchant"} />
-                </div>
-              </div>
-
-              {/* Close */}
-              <div className="flex justify-end gap-3 pt-4 border-t">
-                <button
-                  onClick={() => setSelectedMerchant(null)}
-                  className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-lg transition-colors"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
-// Small reusable info block
-const Info = ({ label, value }) => (
-  <div>
-    <p className="text-sm text-gray-600 mb-1">{label}</p>
-    <p className="text-base font-medium text-gray-900">{value || "N/A"}</p>
+// Info Section
+const InfoSection = ({ title, icon, infos }) => (
+  <div className="bg-gray-50 rounded-lg p-6">
+    <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+      {icon} {title}
+    </h3>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {infos.map((info, idx) => (
+        <div key={idx}>
+          <p className="text-sm text-gray-600 mb-1">{info.label}</p>
+          <p className="text-base font-medium text-gray-900">{info.value || "N/A"}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+// Document Status
+const DocumentStatus = ({ label, status }) => (
+  <div className="flex items-center gap-2">
+    {status ? <CheckCircle className="w-5 h-5 text-green-600" /> : <Clock className="w-5 h-5 text-gray-400" />}
+    <span className="text-sm text-gray-700">{label}</span>
   </div>
 );
 

@@ -251,14 +251,6 @@ const Login = () => {
               variants={itemVariants}
               className="flex items-center justify-between text-sm"
             >
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="rounded"
-                  style={{ accentColor: "#0761b5" }}
-                />
-                <span className="text-gray-600">Remember me</span>
-              </label>
               <span
                 className="font-semibold hover:underline cursor-pointer"
                 style={{ color: "#0761b5" }}
