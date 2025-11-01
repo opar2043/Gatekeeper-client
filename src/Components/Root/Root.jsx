@@ -8,7 +8,7 @@ const Root = () => {
   return (
     <div>
         <Navbar></Navbar>
-        <div className=''>
+        <div className='max-w-[1450px] mx-auto'>
           <Outlet></Outlet>
         </div>
         <Toaster position="top-center" reverseOrder={false} />

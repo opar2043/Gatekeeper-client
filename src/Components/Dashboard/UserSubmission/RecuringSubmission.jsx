@@ -12,17 +12,21 @@ import {
   DollarSign,
 } from "lucide-react";
 import useAuth from "../../Hooks/useAuth";
-import usePayment from "../../Hooks/usePayment";
+// import usePayment from "../../Hooks/usePayment";
+import useAuthorization from "../../Hooks/useAuthorization";
 
 const RecuringSubmission = () => {
   const [selectedPayment, setSelectedPayment] = useState(null);
-  const [payment] = usePayment();
+  // const [payment] = usePayment();
   const { user } = useAuth();
-
+  const [authorization] = useAuthorization();
+  console.log(authorization);
   // Filter recurring payments for logged-in user
   const recurringPayments =
-    Array.isArray(payment) &&
-    payment.filter((p) => p.type === "recuring_form" && p.email === user?.email);
+    Array.isArray(authorization) &&
+    authorization.filter((p) => p.email == user?.email);
+
+  console.log(recurringPayments);
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
@@ -48,7 +52,11 @@ const RecuringSubmission = () => {
             : "bg-yellow-100 text-yellow-700 border border-yellow-200"
         }`}
       >
-        {isConfirmed ? <CheckCircle className="w-5 h-5" /> : <Clock className="w-5 h-5" />}
+        {isConfirmed ? (
+          <CheckCircle className="w-5 h-5" />
+        ) : (
+          <Clock className="w-5 h-5" />
+        )}
         {isConfirmed ? "Confirmed" : "Pending"}
       </span>
     );
@@ -73,7 +81,9 @@ const RecuringSubmission = () => {
             <table className="w-full">
               <thead>
                 <tr className="bg-gradient-to-r from-blue-600 to-blue-700 text-white">
-                  <th className="px-6 py-4 text-left text-sm font-semibold">#</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">
+                    #
+                  </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">
                     <div className="flex items-center gap-2">
                       <Store className="w-4 h-4" /> Company
@@ -89,9 +99,15 @@ const RecuringSubmission = () => {
                       <Mail className="w-4 h-4" /> Email
                     </div>
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold">Amount</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold">Date</th>
-                  <th className="px-6 py-4 text-center text-sm font-semibold">Action</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">
+                    Amount
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">
+                    Date
+                  </th>
+                  <th className="px-6 py-4 text-center text-sm font-semibold">
+                    Action
+                  </th>
                 </tr>
               </thead>
 
@@ -102,14 +118,24 @@ const RecuringSubmission = () => {
                       key={p._id || index}
                       className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-transparent transition-all duration-200"
                     >
-                      <td className="px-6 py-4 text-sm font-medium text-gray-700">{index + 1}</td>
+                      <td className="px-6 py-4 text-sm font-medium text-gray-700">
+                        {index + 1}
+                      </td>
                       <td className="px-6 py-4 text-sm text-gray-900 font-semibold">
                         {p.companyName || "N/A"}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-800">{p.fullName || "N/A"}</td>
-                      <td className="px-6 py-4 text-sm text-gray-700">{p.email || "N/A"}</td>
-                      <td className="px-6 py-4 text-sm text-gray-800">${p.amount || 0}</td>
-                      <td className="px-6 py-4 text-sm text-gray-700">{formatDate(p.date)}</td>
+                      <td className="px-6 py-4 text-sm text-gray-800">
+                        {p.fullName || "N/A"}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-700">
+                        {p.email || "N/A"}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-800">
+                        ${p.amount || 0}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-700">
+                        {formatDate(p.date)}
+                      </td>
                       <td className="px-6 py-4 text-center">
                         <button
                           onClick={() => setSelectedPayment(p)}
@@ -127,8 +153,12 @@ const RecuringSubmission = () => {
                         <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
                           <Store className="w-8 h-8 text-gray-400" />
                         </div>
-                        <p className="text-gray-500 font-medium">No recurring payments found</p>
-                        <p className="text-gray-400 text-sm">Try submitting a new recurring payment form</p>
+                        <p className="text-gray-500 font-medium">
+                          No recurring payments found
+                        </p>
+                        <p className="text-gray-400 text-sm">
+                          Try submitting a new recurring payment form
+                        </p>
                       </div>
                     </td>
                   </tr>
@@ -142,7 +172,11 @@ const RecuringSubmission = () => {
         {recurringPayments?.length > 0 && (
           <div className="mt-6 text-center">
             <p className="text-gray-600">
-              Showing <span className="font-semibold text-blue-600">{recurringPayments.length}</span> total recurring payments
+              Showing{" "}
+              <span className="font-semibold text-blue-600">
+                {recurringPayments.length}
+              </span>{" "}
+              total recurring payments
             </p>
           </div>
         )}
@@ -154,7 +188,10 @@ const RecuringSubmission = () => {
           <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 text-white flex items-center justify-between">
               <h2 className="text-2xl font-bold">Payment Details</h2>
-              <button onClick={() => setSelectedPayment(null)} className="p-1 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors">
+              <button
+                onClick={() => setSelectedPayment(null)}
+                className="p-1 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+              >
                 <X className="w-6 h-6" />
               </button>
             </div>
@@ -162,28 +199,55 @@ const RecuringSubmission = () => {
             <div className="p-6 space-y-6">
               {/* Payment Status */}
               <div className="flex items-center justify-between">
-                <span className="text-lg font-semibold text-gray-700">Payment Status</span>
+                <span className="text-lg font-semibold text-gray-700">
+                  Payment Status
+                </span>
                 {getStatusBadge(selectedPayment.status || "pending")}
               </div>
 
               {/* Personal Info */}
               <InfoBlock label="Full Name" value={selectedPayment.fullName} />
-              <InfoBlock label="Company Name" value={selectedPayment.companyName} />
+              <InfoBlock
+                label="Company Name"
+                value={selectedPayment.companyName}
+              />
 
               {/* Payment Info */}
               <InfoBlock label="Amount" value={`$ ${selectedPayment.amount}`} />
-              <InfoBlock label="Payment Date" value={formatDate(selectedPayment.date)} />
-              <InfoBlock label="Payment For" value={selectedPayment.paymentFor} />
+              <InfoBlock
+                label="Payment Date"
+                value={formatDate(selectedPayment.date)}
+              />
+              <InfoBlock
+                label="Payment For"
+                value={selectedPayment.paymentFor}
+              />
 
               {/* Card Info */}
               <InfoBlock label="Card Type" value={selectedPayment.cardType} />
-              <InfoBlock label="Cardholder Name" value={selectedPayment.cardholderName} />
-              <InfoBlock label="Card Number" value={maskCardNumber(selectedPayment.accountNumber)} />
+              <InfoBlock
+                label="Cardholder Name"
+                value={selectedPayment.cardholderName}
+              />
+              <InfoBlock
+                label="Card Number"
+                value={maskCardNumber(selectedPayment.accountNumber)}
+              />
               <InfoBlock label="Expiry Date" value={selectedPayment.expDate} />
 
               {/* Signature Info */}
-              <InfoBlock label="Signature" value={selectedPayment.signature} />
-              <InfoBlock label="Signature Date" value={formatDate(selectedPayment.signatureDate)} />
+              {selectedPayment.signature && (
+                <img
+                  src={selectedPayment.signature}
+                  alt="Signature Preview"
+                  className="border rounded-md w-60"
+                />
+              )}
+              <InfoBlock
+                label="Signature Date"
+                value={formatDate(selectedPayment.signatureDate)}
+              />
+
               <InfoBlock label="Print Name" value={selectedPayment.printName} />
 
               {/* Close Button */}
