@@ -65,9 +65,9 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
             <div className="w-10 h-10 bg-[#003DA5] rounded flex items-center justify-center">
-              <FiHome className="text-white" size={24} />
+              <FiHome className="text-white" size={22} />
             </div>
-            <span className="text-2xl font-bold text-[#003DA5]">GATEKEEPER</span>
+            <span className="md:text-2xl text-lg font-bold text-[#003DA5]">GATEKEEPER</span>
           </Link>
 
           {/* Desktop Nav Links */}

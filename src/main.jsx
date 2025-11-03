@@ -18,6 +18,10 @@ import AuthProvider from "./Components/Firebase/AuthProvider";
 import MarchantSubmission from "./Components/Dashboard/UserSubmission/MarchantSubmission";
 import PaymentSubmission from "./Components/Dashboard/UserSubmission/PaymentSubmission";
 import RecuringSubmission from "./Components/Dashboard/UserSubmission/RecuringSubmission";
+import CompanyForm from "./Components/Forms/CompanyForm";
+import PaymentAuthorizationForm from "./Components/Forms/PaymentAuthorizationForm";
+import RecurringChargeForm from "./Components/Forms/RecurringChargeForm";
+import Profile from "./Components/Dashboard/Profile/Profile";
 // import Overview from "./Components/Dashboard/Overview";
 
 const queryClient = new QueryClient();
@@ -73,6 +77,22 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/user-recuring-data",
         element: <RecuringSubmission></RecuringSubmission>
+      },
+      {
+        path: "/dashboard/user-merchant-form",
+        element: <CompanyForm></CompanyForm>
+      },
+      {
+        path: "/dashboard/user-payment-form",
+        element: <PaymentAuthorizationForm></PaymentAuthorizationForm>
+      },
+      {
+        path: "/dashboard/user-recuring-form",
+        element: <RecurringChargeForm></RecurringChargeForm>
+      },
+      {
+        path: "/dashboard/profile",
+        element: <Profile></Profile>
       },
     ],
   },

@@ -1,7 +1,13 @@
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
 import { AiOutlineHome } from "react-icons/ai";
-import { FaUser, FaRegClipboard, FaDatabase, FaWpforms } from "react-icons/fa";
+import {
+  FaUser,
+  FaRegClipboard,
+  FaDatabase,
+  FaWpforms,
+  FaInfo,
+} from "react-icons/fa";
 import { MdSpaceDashboard } from "react-icons/md";
 import useAdmin from "../Hooks/useAdmin";
 
@@ -50,15 +56,6 @@ const Dashboard = () => {
 
             <li>
               <Link
-                to="/dashboard/merchant-data"
-                className="flex items-center gap-2 hover:bg-blue-700/60 transition-all duration-300 rounded px-3 py-2"
-              >
-                <FaWpforms size={20} /> Merchant Form
-              </Link>
-            </li>
-
-            <li>
-              <Link
                 to="/dashboard/recuring-data"
                 className="flex items-center gap-2 hover:bg-blue-700/60 transition-all duration-300 rounded px-3 py-2"
               >
@@ -77,6 +74,50 @@ const Dashboard = () => {
           </ul>
         ) : (
           <ul className="space-y-3 text-white text-base">
+            <li>
+              <Link
+                to="/dashboard/merchant-data"
+                className="flex items-center gap-2 hover:bg-blue-700/60 transition-all duration-300 rounded px-3 py-2"
+              >
+                <FaUser size={20} /> Profile
+              </Link>
+            </li>
+            {/* <li>
+              <Link
+                to="/dashboard/merchant-data"
+                className="flex items-center gap-2 hover:bg-blue-700/60 transition-all duration-300 rounded px-3 py-2"
+              >
+                <FaWpforms size={20} /> Merchant Form
+              </Link>
+            </li> */}
+            <li>
+              <Link
+                to="/dashboard/user-merchant-form"
+                className="flex items-center gap-2 hover:bg-blue-700/60 transition-all duration-300 rounded px-3 py-2"
+              >
+                <FaWpforms size={20} />
+                Merchant Form
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/dashboard/user-recuring-form"
+                className="flex items-center gap-2 hover:bg-blue-700/60 transition-all duration-300 rounded px-3 py-2"
+              >
+                <FaWpforms size={20} />
+                Authorization Form
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/dashboard/user-payment-form"
+                className="flex items-center gap-2 hover:bg-blue-700/60 transition-all duration-300 rounded px-3 py-2"
+              >
+                <FaWpforms size={20} />
+                Payment Form
+              </Link>
+            </li>
+
             <li>
               <Link
                 to="/dashboard/user-merchant-data"
@@ -119,7 +160,7 @@ const Dashboard = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-6 bg-gray-50">
+      <div className="flex-1 p-2 bg-gray-50">
         <Outlet />
       </div>
     </div>

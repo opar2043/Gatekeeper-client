@@ -711,6 +711,62 @@ Contact Phone: ${collectedData.contactPhone}
             </div>
           </section>
 
+
+          {/* Business image Section it will show when an image file input*/}
+{/* Business image Section it will show when an image file input*/}
+{(formData.hasFnsProvider || formData.hasDriversLicense || formData.hasVoidedCheck) && (
+  <section className="md:p-8 p-4 border-b border-gray-200">
+    <div className="flex items-center mb-6">
+      <div className="w-1 h-8 bg-purple-500 rounded-full mr-4"></div>
+      <h2 className="text-2xl font-bold text-gray-800">
+        Business Requirements Pdf
+      </h2>
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6 gap-4">
+      {formData.hasDriversLicense && (
+        <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-blue-50 cursor-pointer transition-colors">
+          <input
+            type="file"
+            name="driversLicenseFile"
+            className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
+          />
+          <span className="text-gray-700 font-medium">
+            Driver's License PDF / Image
+          </span>
+        </label>
+      )}
+
+      {formData.hasVoidedCheck && (
+        <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-blue-50 cursor-pointer transition-colors">
+          <input
+            type="file"
+            name="voidedCheckFile"
+            className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
+          />
+          <span className="text-gray-700 font-medium">
+            Voided Check or Bank Letter
+          </span>
+        </label>
+      )}
+
+      {formData.hasFnsProvider && (
+        <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-blue-50 cursor-pointer transition-colors">
+          <input
+            type="file"
+            name="fnsProviderFile"
+            className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
+          />
+          <span className="text-gray-700 font-medium">
+            FNS Provider (EAT/Proof Storage)
+          </span>
+        </label>
+      )}
+    </div>
+  </section>
+)}
+
+
           {/* Banking Information Section */}
           <section className="md:p-8 p-4">
             <div className="flex items-center mb-6">
