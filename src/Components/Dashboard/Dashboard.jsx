@@ -76,7 +76,7 @@ const Dashboard = () => {
           <ul className="space-y-3 text-white text-base">
             <li>
               <Link
-                to="/dashboard/merchant-data"
+                to="/dashboard/profile"
                 className="flex items-center gap-2 hover:bg-blue-700/60 transition-all duration-300 rounded px-3 py-2"
               >
                 <FaUser size={20} /> Profile

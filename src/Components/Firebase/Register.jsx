@@ -6,7 +6,7 @@ import useAxios from "../Hooks/useAxios";
 import useAuth from "../Hooks/useAuth";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
-
+const img_api_key = "https://api.imgbb.com/1/upload?key=188918a9c4dee4bd0453f7ec15042a27";
 const Register = () => {
   const { handleRegister } = useAuth();
   const navigate = useNavigate();
@@ -17,27 +17,82 @@ const Register = () => {
   const handleSignUp = (e) => {
     e.preventDefault();
     setIsLoading(true);
+
     const name = e.target.name.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
+
+    // existing fields in your form
+    const city = e.target.city?.value;
+    const mobile = e.target.mobile?.value;
+    const company = e.target.company?.value;
+
+    // new personal info fields
+    const gender = e.target.gender?.value;
+    const dob = e.target.dob?.value; // yyyy-mm-dd from <input type="date" />
+    const photoURL = e.target.photoURL?.value || "";
+         const photo = e.tarfet.photo.files[0];
+
+    const data = new FormData();
+    data.append("image", photo);
+
+
+        fetch(img_api_key, {
+      method: "POST",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Upload success:", data);
+
+                 const photoObj = {
+          name,
+          image: data.data.url,
+        };
+
+       
+    // minimal client validation (optional)
+    if (password.length < 6) {
+      setIsLoading(false);
+      return Swal.fire({
+        title: "Weak Password",
+        text: "Password must be at least 6 characters.",
+        icon: "warning",
+        confirmButtonColor: "#EAB308",
+      });
+    }
+
 
     const userObj = {
       name,
       email,
       role: "customer",
+      city,
+      mobile,
+      company,
+      gender,
+      dob,
+      photoURL,
+      status: "active",
+      createdAt: new Date().toISOString(),
+      lastLoginAt: null,
     };
 
     handleRegister(email, password)
-      .then((userCredential) => {
-        axiosSecure.post("/users", userObj).then(() => {
-          toast.success("Account created successfully!");
-          navigate("/");
-        });
+      .then(() => {
+        return axiosSecure.post("/users", userObj);
+      })
+      .then(() => {
+        toast.success("Account created successfully!");
+        navigate("/");
       })
       .catch((error) => {
         Swal.fire({
           title: "Registration Failed",
-          text: error.message || "Something went wrong.",
+          text:
+            error?.response?.data?.message ||
+            error.message ||
+            "Something went wrong.",
           icon: "error",
           confirmButtonColor: "#EAB308",
         });
@@ -51,10 +106,7 @@ const Register = () => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        delayChildren: 0.2,
-        staggerChildren: 0.1,
-      },
+      transition: { delayChildren: 0.2, staggerChildren: 0.1 },
     },
   };
 
@@ -93,27 +145,13 @@ const Register = () => {
         >
           {/* Animated Background Elements */}
           <motion.div
-            animate={{
-              scale: [1, 1.2, 1],
-              rotate: [0, 90, 0],
-            }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              ease: "linear",
-            }}
+            animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
             className="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"
           />
           <motion.div
-            animate={{
-              scale: [1, 1.3, 1],
-              rotate: [0, -90, 0],
-            }}
-            transition={{
-              duration: 15,
-              repeat: Infinity,
-              ease: "linear",
-            }}
+            animate={{ scale: [1, 1.3, 1], rotate: [0, -90, 0] }}
+            transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
             className="absolute bottom-10 right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"
           />
 
@@ -128,7 +166,7 @@ const Register = () => {
                 <FaLock className="text-5xl text-black" />
               </div>
             </motion.div>
-            
+
             <motion.h2
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -137,14 +175,15 @@ const Register = () => {
             >
               Join Gatekeeper
             </motion.h2>
-            
+
             <motion.p
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.9 }}
               className="text-gray-900 max-w-sm mx-auto text-lg leading-relaxed"
             >
-              Start managing your business securely and efficiently with our powerful tools.
+              Start managing your business securely and efficiently with our
+              powerful tools.
             </motion.p>
 
             <motion.div
@@ -153,18 +192,20 @@ const Register = () => {
               transition={{ delay: 1.1 }}
               className="mt-8 space-y-3"
             >
-              {["Secure Access", "Easy Management", "24/7 Support"].map((feature, index) => (
-                <motion.div
-                  key={feature}
-                  initial={{ x: -20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: 1.2 + index * 0.1 }}
-                  className="flex items-center justify-center gap-2 text-black"
-                >
-                  <div className="w-2 h-2 bg-black rounded-full" />
-                  <span className="font-medium">{feature}</span>
-                </motion.div>
-              ))}
+              {["Secure Access", "Easy Management", "24/7 Support"].map(
+                (feature, index) => (
+                  <motion.div
+                    key={feature}
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 1.2 + index * 0.1 }}
+                    className="flex items-center justify-center gap-2 text-black"
+                  >
+                    <div className="w-2 h-2 bg-black rounded-full" />
+                    <span className="font-medium">{feature}</span>
+                  </motion.div>
+                )
+              )}
             </motion.div>
           </div>
         </motion.div>
@@ -186,16 +227,106 @@ const Register = () => {
           </motion.div>
 
           <form onSubmit={handleSignUp} className="space-y-5">
-            {/* Full Name */}
+            {/* Full Name + City */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <motion.div variants={itemVariants} className="relative group">
+                <FaUser className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-[#EAB308] transition-colors" />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Full Name"
+                  required
+                  className="w-full pl-11 pr-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-[#EAB308] focus:ring-4 focus:ring-[#EAB308]/10 outline-none text-gray-800 transition-all"
+                />
+              </motion.div>
+
+              <motion.div variants={itemVariants} className="relative group">
+                <FaUser className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-[#EAB308] transition-colors" />
+                <input
+                  type="text"
+                  name="city"
+                  placeholder="Enter Your City"
+                  required
+                  className="w-full pl-11 pr-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-[#EAB308] focus:ring-4 focus:ring-[#EAB308]/10 outline-none text-gray-800 transition-all"
+                />
+              </motion.div>
+            </div>
+
+            {/* Mobile + Company */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <motion.div variants={itemVariants} className="relative group">
+                <FaUser className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-[#EAB308] transition-colors" />
+                <input
+                  type="text"
+                  name="mobile"
+                  placeholder="Mobile Number"
+                  required
+                  className="w-full pl-11 pr-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-[#EAB308] focus:ring-4 focus:ring-[#EAB308]/10 outline-none text-gray-800 transition-all"
+                />
+              </motion.div>
+
+              <motion.div variants={itemVariants} className="relative group">
+                <FaUser className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-[#EAB308] transition-colors" />
+                <input
+                  type="text"
+                  name="company"
+                  placeholder="Enter Your company Name"
+                  required
+                  className="w-full pl-11 pr-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-[#EAB308] focus:ring-4 focus:ring-[#EAB308]/10 outline-none text-gray-800 transition-all"
+                />
+              </motion.div>
+            </div>
+
+            {/* Personal Details */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Gender */}
+              <motion.div variants={itemVariants} className="relative group">
+                <select
+                  name="gender"
+                  required
+                  className="w-full pl-4 pr-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-[#EAB308] focus:ring-4 focus:ring-[#EAB308]/10 outline-none text-gray-800 transition-all"
+                >
+                  <option value="">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </motion.div>
+
+              {/* Date of Birth */}
+              <motion.div variants={itemVariants} className="relative group">
+                <input
+                  type="date"
+                  name="dob"
+                  placeholder="Date of Birth"
+                  required
+                  className="w-full pl-4 pr-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-[#EAB308] focus:ring-4 focus:ring-[#EAB308]/10 outline-none text-gray-800 transition-all"
+                />
+              </motion.div>
+            </div>
+
+
+
+            {/* Optional: Profile Photo URL */}
             <motion.div variants={itemVariants} className="relative group">
-              <FaUser className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-[#EAB308] transition-colors" />
-              <input
-                type="text"
-                name="name"
-                placeholder="Full Name"
-                required
-                className="w-full pl-11 pr-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-[#EAB308] focus:ring-4 focus:ring-[#EAB308]/10 outline-none text-gray-800 transition-all"
-              />
+              {/* <input
+                type="url"
+                name="photoURL"
+                placeholder="Profile Photo URL (optional)"
+                className="w-full pl-4 pr-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-[#EAB308] focus:ring-4 focus:ring-[#EAB308]/10 outline-none text-gray-800 transition-all"
+              /> */}
+
+                      <div>
+          <label className="block text-sm font-semibold text-gray-700">
+            Upload Photo
+          </label>
+          <input
+            type="file"
+            name="photo"
+            required
+            className="w-full mt-1 p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          />
+        </div>
             </motion.div>
 
             {/* Email */}
@@ -228,6 +359,18 @@ const Register = () => {
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </motion.div>
+
+            {/* Terms */}
+            <motion.label
+              variants={itemVariants}
+              className="flex items-start gap-3 text-sm text-gray-600"
+            >
+              <input type="checkbox" name="accept" required className="mt-1" />
+              <span>
+                I agree to the <span className="text-[#EAB308]">Terms</span> and{" "}
+                <span className="text-[#EAB308]">Privacy Policy</span>.
+              </span>
+            </motion.label>
 
             {/* Submit Button */}
             <motion.button
