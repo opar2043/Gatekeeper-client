@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import useMarchent from "../../Hooks/useMarchent";
 import useAuth from "../../Hooks/useAuth";
+import { motion } from "framer-motion";
 
 const MarchantSubmission = () => {
   const [selectedMerchant, setSelectedMerchant] = useState(null);
@@ -26,6 +27,7 @@ const MarchantSubmission = () => {
     user?.email && Array.isArray(marchants)
       ? marchants.filter((mar) => mar.email === user.email)
       : [];
+  console.log(findForm);
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
@@ -61,7 +63,9 @@ const MarchantSubmission = () => {
             <table className="w-full">
               <thead>
                 <tr className="bg-gradient-to-r from-blue-600 to-blue-700 text-white">
-                  <th className="px-6 py-4 text-left text-sm font-semibold">#</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">
+                    #
+                  </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">
                     <div className="flex items-center gap-2">
                       <Store className="w-4 h-4" />
@@ -76,8 +80,12 @@ const MarchantSubmission = () => {
                     <Mail className="w-4 h-4" />
                     Email
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold">Status</th>
-                  <th className="px-6 py-4 text-center text-sm font-semibold">Action</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">
+                    Status
+                  </th>
+                  <th className="px-6 py-4 text-center text-sm font-semibold">
+                    Action
+                  </th>
                 </tr>
               </thead>
 
@@ -138,7 +146,9 @@ const MarchantSubmission = () => {
                         <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
                           <Store className="w-8 h-8 text-gray-400" />
                         </div>
-                        <p className="text-gray-500 font-medium">No merchants found</p>
+                        <p className="text-gray-500 font-medium">
+                          No merchants found
+                        </p>
                         <p className="text-gray-400 text-sm">
                           Try adjusting your search or filter
                         </p>
@@ -167,7 +177,9 @@ const MarchantSubmission = () => {
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold">Merchant Details</h2>
-                    <p className="text-blue-100 text-sm">{selectedMerchant.logoName}</p>
+                    <p className="text-blue-100 text-sm">
+                      {selectedMerchant.logoName}
+                    </p>
                   </div>
                 </div>
                 <button
@@ -181,7 +193,9 @@ const MarchantSubmission = () => {
               <div className="p-6 space-y-6">
                 {/* Status Badge */}
                 <div className="flex items-center justify-between pb-4 border-b">
-                  <span className="text-lg font-semibold text-gray-700">Account Status</span>
+                  <span className="text-lg font-semibold text-gray-700">
+                    Account Status
+                  </span>
                   {selectedMerchant.status === "confirmed" ? (
                     <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-green-100 text-green-700 border border-green-200">
                       <CheckCircle className="w-5 h-5" />
@@ -200,12 +214,30 @@ const MarchantSubmission = () => {
                   title="Business Information"
                   icon={<Building className="w-5 h-5 text-blue-600" />}
                   infos={[
-                    { label: "Business Name", value: selectedMerchant.logoName },
-                    { label: "Date Established", value: formatDate(selectedMerchant.dateEstablished) },
-                    { label: "Business Type", value: selectedMerchant.businessType },
-                    { label: "Taxpayer ID", value: selectedMerchant.taxpayerId },
-                    { label: "Business Email", value: selectedMerchant.businessEmail },
-                    { label: "Business Website", value: selectedMerchant.businessWebsite },
+                    {
+                      label: "Business Name",
+                      value: selectedMerchant.logoName,
+                    },
+                    {
+                      label: "Date Established",
+                      value: formatDate(selectedMerchant.dateEstablished),
+                    },
+                    {
+                      label: "Business Type",
+                      value: selectedMerchant.businessType,
+                    },
+                    {
+                      label: "Taxpayer ID",
+                      value: selectedMerchant.taxpayerId,
+                    },
+                    {
+                      label: "Business Email",
+                      value: selectedMerchant.businessEmail,
+                    },
+                    {
+                      label: "Business Website",
+                      value: selectedMerchant.businessWebsite,
+                    },
                   ]}
                 />
 
@@ -214,9 +246,15 @@ const MarchantSubmission = () => {
                   title="Owner Information"
                   icon={<User className="w-5 h-5 text-blue-600" />}
                   infos={[
-                    { label: "Full Name", value: `${selectedMerchant.firstName} ${selectedMerchant.lastName}` },
+                    {
+                      label: "Full Name",
+                      value: `${selectedMerchant.firstName} ${selectedMerchant.lastName}`,
+                    },
                     { label: "Title", value: selectedMerchant.titleName },
-                    { label: "Owner Email", value: selectedMerchant.ownerEmail },
+                    {
+                      label: "Owner Email",
+                      value: selectedMerchant.ownerEmail,
+                    },
                     { label: "Cell Phone", value: selectedMerchant.cellPhone },
                   ]}
                 />
@@ -227,8 +265,14 @@ const MarchantSubmission = () => {
                   icon={<CreditCard className="w-5 h-5 text-blue-600" />}
                   infos={[
                     { label: "Bank Name", value: selectedMerchant.bankName },
-                    { label: "Account Number", value: selectedMerchant.accountNumber },
-                    { label: "Routing Number", value: selectedMerchant.routingNumber },
+                    {
+                      label: "Account Number",
+                      value: selectedMerchant.accountNumber,
+                    },
+                    {
+                      label: "Routing Number",
+                      value: selectedMerchant.routingNumber,
+                    },
                   ]}
                 />
 
@@ -237,8 +281,14 @@ const MarchantSubmission = () => {
                   title="Emergency Contact"
                   icon={<Phone className="w-5 h-5 text-blue-600" />}
                   infos={[
-                    { label: "Contact Name", value: selectedMerchant.contactName },
-                    { label: "Contact Phone", value: selectedMerchant.contactPhone },
+                    {
+                      label: "Contact Name",
+                      value: selectedMerchant.contactName,
+                    },
+                    {
+                      label: "Contact Phone",
+                      value: selectedMerchant.contactPhone,
+                    },
                   ]}
                 />
 
@@ -249,11 +299,139 @@ const MarchantSubmission = () => {
                     Document Verification
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <DocumentStatus label="Driver's License" status={selectedMerchant.hasDriversLicense} />
-                    <DocumentStatus label="Voided Check" status={selectedMerchant.hasVoidedCheck} />
-                    <DocumentStatus label="FNS Provider" status={selectedMerchant.hasFnsProvider} />
+                    <DocumentStatus
+                      label="Driver's License"
+                      status={selectedMerchant.hasDriversLicense}
+                    />
+                    <DocumentStatus
+                      label="Voided Check"
+                      status={selectedMerchant.hasVoidedCheck}
+                    />
+                    <DocumentStatus
+                      label="FNS Provider"
+                      status={selectedMerchant.hasFnsProvider}
+                    />
                   </div>
                 </div>
+
+                {/* --- Images Provided --- */}
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="bg-gray-50 rounded-lg p-6"
+                >
+                  <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                    <FileText className="w-5 h-5 text-blue-600" />
+                    Image Provided
+                  </h3>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    {/* Card helper */}
+                    {[
+                      {
+                        label: "Driver's License",
+                        url: selectedMerchant?.driversLicenseLink || "",
+                      },
+                      {
+                        label: "Voided Check / Bank Letter",
+                        url: selectedMerchant?.voidedCheckLink || "",
+                      },
+                      {
+                        label: "FNS Provider (EAT/Proof Storage)",
+                        url: selectedMerchant?.fnsProviderLink || "",
+                      },
+                    ].map(({ label, url }) => {
+                      const isPdf =
+                        typeof url === "string" &&
+                        url.toLowerCase().includes(".pdf");
+                      const provided = !!url;
+
+                      return (
+                        <motion.div
+                          key={label}
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.25 }}
+                          className="rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow"
+                        >
+                          <div className="p-4">
+                            <div className="flex items-center justify-between gap-2 mb-3">
+                              <h4 className="text-sm font-semibold text-gray-800">
+                                {label}
+                              </h4>
+                              {provided ? (
+                                <span
+                                  className={`text-xs px-2 py-1 rounded-full ${
+                                    isPdf
+                                      ? "bg-red-50 text-red-600 border border-red-200"
+                                      : "bg-blue-50 text-blue-600 border border-blue-200"
+                                  }`}
+                                >
+                                  {isPdf ? "PDF" : "Image"}
+                                </span>
+                              ) : (
+                                <span className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-500 border border-gray-200">
+                                  Not Provided
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Preview area */}
+                            <div className="aspect-[4/3] w-full rounded-lg bg-gray-50 border border-dashed border-gray-200 grid place-items-center overflow-hidden">
+                              {provided ? (
+                                isPdf ? (
+                                  <div className="flex flex-col items-center justify-center gap-2 p-4 text-center">
+                                    <div className="text-gray-600 text-sm">
+                                      PDF uploaded
+                                    </div>
+                                    <a
+                                      href={url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium rounded-md bg-blue-600 text-white hover:bg-blue-700"
+                                    >
+                                      View PDF
+                                    </a>
+                                  </div>
+                                ) : (
+                                  <img
+                                    src={url}
+                                    alt={label}
+                                    className="h-full w-full object-contain"
+                                    onError={(e) => {
+                                      e.currentTarget.src = "";
+                                      e.currentTarget.alt =
+                                        "Preview unavailable";
+                                    }}
+                                  />
+                                )
+                              ) : (
+                                <span className="text-gray-400 text-sm">
+                                  No file
+                                </span>
+                              )}
+                            </div>
+
+                            {/* View link (always show when provided) */}
+                            {provided && (
+                              <div className="mt-3">
+                                <a
+                                  href={url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                                >
+                                  Open in new tab →
+                                </a>
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                </motion.div>
 
                 {/* Close Button */}
                 <div className="flex justify-end gap-3 pt-4 border-t">
@@ -283,7 +461,9 @@ const InfoSection = ({ title, icon, infos }) => (
       {infos.map((info, idx) => (
         <div key={idx}>
           <p className="text-sm text-gray-600 mb-1">{info.label}</p>
-          <p className="text-base font-medium text-gray-900">{info.value || "N/A"}</p>
+          <p className="text-base font-medium text-gray-900">
+            {info.value || "N/A"}
+          </p>
         </div>
       ))}
     </div>
@@ -293,7 +473,11 @@ const InfoSection = ({ title, icon, infos }) => (
 // Document Status
 const DocumentStatus = ({ label, status }) => (
   <div className="flex items-center gap-2">
-    {status ? <CheckCircle className="w-5 h-5 text-green-600" /> : <Clock className="w-5 h-5 text-gray-400" />}
+    {status ? (
+      <CheckCircle className="w-5 h-5 text-green-600" />
+    ) : (
+      <Clock className="w-5 h-5 text-gray-400" />
+    )}
     <span className="text-sm text-gray-700">{label}</span>
   </div>
 );

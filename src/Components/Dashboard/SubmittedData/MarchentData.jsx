@@ -1,6 +1,22 @@
 import React, { useState } from "react";
-import { Store, User, Mail, Eye, Search, Filter, CheckCircle, Clock, X, Phone, Calendar, Building, CreditCard, FileText } from "lucide-react";
+import {
+  Store,
+  User,
+  Mail,
+  Eye,
+  Search,
+  Filter,
+  CheckCircle,
+  Clock,
+  X,
+  Phone,
+  Calendar,
+  Building,
+  CreditCard,
+  FileText,
+} from "lucide-react";
 import useMarchent from "../../Hooks/useMarchent";
+
 
 const MerchantData = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -8,29 +24,34 @@ const MerchantData = () => {
   const [selectedMerchant, setSelectedMerchant] = useState(null);
 
   const [marchants] = useMarchent() || [];
+
   const merchants = Array.isArray(marchants) ? marchants : [];
 
+ 
   const filteredMerchants = merchants.filter((merchant) => {
-    const matchesSearch = 
+    const matchesSearch =
       merchant.logoName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       merchant.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       merchant.lastName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       merchant.businessEmail?.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesFilter = filterStatus === "all" || merchant.status === filterStatus;
-    
+
+    const matchesFilter =
+      filterStatus === "all" || merchant.status === filterStatus;
+
     return matchesSearch && matchesFilter;
   });
-
-  const confirmedCount = merchants.filter(m => m.status === "confirmed").length;
-  const pendingCount = merchants.filter(m => m.status === "pending").length;
+  console.log(filteredMerchants);
+  const confirmedCount = merchants.filter(
+    (m) => m.status === "confirmed"
+  ).length;
+  const pendingCount = merchants.filter((m) => m.status === "pending").length;
 
   const formatDate = (dateString) => {
-    if (!dateString) return 'N/A';
-    return new Date(dateString).toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
+    if (!dateString) return "N/A";
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
@@ -43,7 +64,9 @@ const MerchantData = () => {
             <Store className="w-10 h-10" />
             Merchant Management
           </h1>
-          <p className="text-gray-600 text-lg">Monitor and manage all merchant accounts</p>
+          <p className="text-gray-600 text-lg">
+            Monitor and manage all merchant accounts
+          </p>
         </div>
 
         {/* Stats Cards */}
@@ -51,8 +74,12 @@ const MerchantData = () => {
           <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-600 hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm font-medium mb-1">Total Merchants</p>
-                <p className="text-3xl font-bold text-gray-800">{merchants.length}</p>
+                <p className="text-gray-600 text-sm font-medium mb-1">
+                  Total Merchants
+                </p>
+                <p className="text-3xl font-bold text-gray-800">
+                  {merchants.length}
+                </p>
               </div>
               <div className="bg-blue-100 p-4 rounded-full">
                 <Store className="w-8 h-8 text-blue-600" />
@@ -63,8 +90,12 @@ const MerchantData = () => {
           <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500 hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm font-medium mb-1">Confirmed</p>
-                <p className="text-3xl font-bold text-green-600">{confirmedCount}</p>
+                <p className="text-gray-600 text-sm font-medium mb-1">
+                  Confirmed
+                </p>
+                <p className="text-3xl font-bold text-green-600">
+                  {confirmedCount}
+                </p>
               </div>
               <div className="bg-green-100 p-4 rounded-full">
                 <CheckCircle className="w-8 h-8 text-green-600" />
@@ -75,8 +106,12 @@ const MerchantData = () => {
           <div className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-yellow-500 hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm font-medium mb-1">Pending</p>
-                <p className="text-3xl font-bold text-yellow-600">{pendingCount}</p>
+                <p className="text-gray-600 text-sm font-medium mb-1">
+                  Pending
+                </p>
+                <p className="text-3xl font-bold text-yellow-600">
+                  {pendingCount}
+                </p>
               </div>
               <div className="bg-yellow-100 p-4 rounded-full">
                 <Clock className="w-8 h-8 text-yellow-600" />
@@ -120,7 +155,9 @@ const MerchantData = () => {
             <table className="w-full">
               <thead>
                 <tr className="bg-gradient-to-r from-blue-600 to-blue-700 text-white">
-                  <th className="px-6 py-4 text-left text-sm font-semibold">#</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">
+                    #
+                  </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">
                     <div className="flex items-center gap-2">
                       <Store className="w-4 h-4" />
@@ -139,8 +176,12 @@ const MerchantData = () => {
                       Email
                     </div>
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold">Status</th>
-                  <th className="px-6 py-4 text-center text-sm font-semibold">Action</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">
+                    Status
+                  </th>
+                  <th className="px-6 py-4 text-center text-sm font-semibold">
+                    Action
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -200,8 +241,12 @@ const MerchantData = () => {
                         <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
                           <Store className="w-8 h-8 text-gray-400" />
                         </div>
-                        <p className="text-gray-500 font-medium">No merchants found</p>
-                        <p className="text-gray-400 text-sm">Try adjusting your search or filter</p>
+                        <p className="text-gray-500 font-medium">
+                          No merchants found
+                        </p>
+                        <p className="text-gray-400 text-sm">
+                          Try adjusting your search or filter
+                        </p>
                       </div>
                     </td>
                   </tr>
@@ -215,8 +260,15 @@ const MerchantData = () => {
         {filteredMerchants.length > 0 && (
           <div className="mt-6 text-center">
             <p className="text-gray-600">
-              Showing <span className="font-semibold text-blue-600">{filteredMerchants.length}</span> of{" "}
-              <span className="font-semibold text-blue-600">{merchants.length}</span> merchants
+              Showing{" "}
+              <span className="font-semibold text-blue-600">
+                {filteredMerchants.length}
+              </span>{" "}
+              of{" "}
+              <span className="font-semibold text-blue-600">
+                {merchants.length}
+              </span>{" "}
+              merchants
             </p>
           </div>
         )}
@@ -233,7 +285,9 @@ const MerchantData = () => {
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold">Merchant Details</h2>
-                  <p className="text-blue-100 text-sm">{selectedMerchant.logoName}</p>
+                  <p className="text-blue-100 text-sm">
+                    {selectedMerchant.logoName}
+                  </p>
                 </div>
               </div>
               <button
@@ -247,7 +301,9 @@ const MerchantData = () => {
             <div className="p-6 space-y-6">
               {/* Status Badge */}
               <div className="flex items-center justify-between pb-4 border-b">
-                <span className="text-lg font-semibold text-gray-700">Account Status</span>
+                <span className="text-lg font-semibold text-gray-700">
+                  Account Status
+                </span>
                 {selectedMerchant.status === "confirmed" ? (
                   <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-green-100 text-green-700 border border-green-200">
                     <CheckCircle className="w-5 h-5" />
@@ -270,27 +326,43 @@ const MerchantData = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-600 mb-1">Business Name</p>
-                    <p className="text-base font-medium text-gray-900">{selectedMerchant.logoName || 'N/A'}</p>
+                    <p className="text-base font-medium text-gray-900">
+                      {selectedMerchant.logoName || "N/A"}
+                    </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">Date Established</p>
-                    <p className="text-base font-medium text-gray-900">{formatDate(selectedMerchant.dateEstablished)}</p>
+                    <p className="text-sm text-gray-600 mb-1">
+                      Date Established
+                    </p>
+                    <p className="text-base font-medium text-gray-900">
+                      {formatDate(selectedMerchant.dateEstablished)}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 mb-1">Business Type</p>
-                    <p className="text-base font-medium text-gray-900">{selectedMerchant.businessType || 'N/A'}</p>
+                    <p className="text-base font-medium text-gray-900">
+                      {selectedMerchant.businessType || "N/A"}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 mb-1">Taxpayer ID</p>
-                    <p className="text-base font-medium text-gray-900">{selectedMerchant.taxpayerId || 'N/A'}</p>
+                    <p className="text-base font-medium text-gray-900">
+                      {selectedMerchant.taxpayerId || "N/A"}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 mb-1">Business Email</p>
-                    <p className="text-base font-medium text-gray-900">{selectedMerchant.businessEmail || 'N/A'}</p>
+                    <p className="text-base font-medium text-gray-900">
+                      {selectedMerchant.businessEmail || "N/A"}
+                    </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">Business Website</p>
-                    <p className="text-base font-medium text-gray-900">{selectedMerchant.businessWebsite || 'N/A'}</p>
+                    <p className="text-sm text-gray-600 mb-1">
+                      Business Website
+                    </p>
+                    <p className="text-base font-medium text-gray-900">
+                      {selectedMerchant.businessWebsite || "N/A"}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -304,19 +376,27 @@ const MerchantData = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-600 mb-1">Full Name</p>
-                    <p className="text-base font-medium text-gray-900">{selectedMerchant.firstName} {selectedMerchant.lastName}</p>
+                    <p className="text-base font-medium text-gray-900">
+                      {selectedMerchant.firstName} {selectedMerchant.lastName}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 mb-1">Title</p>
-                    <p className="text-base font-medium text-gray-900">{selectedMerchant.titleName || 'N/A'}</p>
+                    <p className="text-base font-medium text-gray-900">
+                      {selectedMerchant.titleName || "N/A"}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 mb-1">Owner Email</p>
-                    <p className="text-base font-medium text-gray-900">{selectedMerchant.ownerEmail || 'N/A'}</p>
+                    <p className="text-base font-medium text-gray-900">
+                      {selectedMerchant.ownerEmail || "N/A"}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 mb-1">Cell Phone</p>
-                    <p className="text-base font-medium text-gray-900">{selectedMerchant.cellPhone || 'N/A'}</p>
+                    <p className="text-base font-medium text-gray-900">
+                      {selectedMerchant.cellPhone || "N/A"}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -330,15 +410,21 @@ const MerchantData = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-600 mb-1">Bank Name</p>
-                    <p className="text-base font-medium text-gray-900">{selectedMerchant.bankName || 'N/A'}</p>
+                    <p className="text-base font-medium text-gray-900">
+                      {selectedMerchant.bankName || "N/A"}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 mb-1">Account Number</p>
-                    <p className="text-base font-medium text-gray-900">{selectedMerchant.accountNumber || 'N/A'}</p>
+                    <p className="text-base font-medium text-gray-900">
+                      {selectedMerchant.accountNumber || "N/A"}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 mb-1">Routing Number</p>
-                    <p className="text-base font-medium text-gray-900">{selectedMerchant.routingNumber || 'N/A'}</p>
+                    <p className="text-base font-medium text-gray-900">
+                      {selectedMerchant.routingNumber || "N/A"}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -352,11 +438,15 @@ const MerchantData = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-600 mb-1">Contact Name</p>
-                    <p className="text-base font-medium text-gray-900">{selectedMerchant.contactName || 'N/A'}</p>
+                    <p className="text-base font-medium text-gray-900">
+                      {selectedMerchant.contactName || "N/A"}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 mb-1">Contact Phone</p>
-                    <p className="text-base font-medium text-gray-900">{selectedMerchant.contactPhone || 'N/A'}</p>
+                    <p className="text-base font-medium text-gray-900">
+                      {selectedMerchant.contactPhone || "N/A"}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -374,7 +464,9 @@ const MerchantData = () => {
                     ) : (
                       <Clock className="w-5 h-5 text-gray-400" />
                     )}
-                    <span className="text-sm text-gray-700">Driver's License</span>
+                    <span className="text-sm text-gray-700">
+                      Driver's License
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
                     {selectedMerchant.hasVoidedCheck ? (
@@ -391,6 +483,24 @@ const MerchantData = () => {
                       <Clock className="w-5 h-5 text-gray-400" />
                     )}
                     <span className="text-sm text-gray-700">FNS Provider</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gray-50 rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-blue-600" />
+                  Image Provided
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <img src={selectedMerchant.driversLicenseLink} alt="" />
+                  </div>
+                  <div>
+                    <img src={selectedMerchant.voidedCheckLink} alt="" />
+                  </div>
+                  <div>
+                    <img src={selectedMerchant.fnsProviderLink} alt="" />
                   </div>
                 </div>
               </div>

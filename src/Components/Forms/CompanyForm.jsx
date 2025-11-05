@@ -4,6 +4,10 @@ import Swal from "sweetalert2";
 import useAxios from "../Hooks/useAxios";
 import toast from "react-hot-toast";
 import useAuth from "../Hooks/useAuth";
+import { motion } from "framer-motion";
+
+const img_api_key = "https://api.imgbb.com/1/upload?key=188918a9c4dee4bd0453f7ec15042a27";
+
 const CompanyForm = () => {
   const [formData, setFormData] = useState({
     // Business Information
@@ -68,11 +72,33 @@ const CompanyForm = () => {
   };
 
   const axiosSecure = useAxios();
-  const {user} = useAuth()
-const handleSubmit = async (e) => {
+  const { user } = useAuth();
+
+  // Helper: upload a single file to imgbb and return the public URL
+  const uploadToImgBB = async (file) => {
+    const data = new FormData();
+    data.append("image", file);
+    const res = await fetch(img_api_key, {
+      method: "POST",
+      body: data,
+    });
+    const json = await res.json();
+    if (!json?.success) {
+      throw new Error(json?.error?.message || "File upload failed.");
+    }
+    return json?.data?.display_url || json?.data?.url;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const frm = e.target;
 
+    // Read the file inputs directly from the form
+    const driversLicenseFile = frm.driversLicenseFile?.files?.[0] || null;
+    const voidedCheckFile = frm.voidedCheckFile?.files?.[0] || null;
+    const fnsProviderFile = frm.fnsProviderFile?.files?.[0] || null;
+
+    // Build the base payload
     const collectedData = {
       logoName: frm.logoName?.value || "",
       dateEstablished: frm.dateEstablished?.value || "",
@@ -94,13 +120,67 @@ const handleSubmit = async (e) => {
       hasVoidedCheck: formData.hasVoidedCheck,
       hasFnsProvider: formData.hasFnsProvider,
       email: user?.email,
-      type: "merchent_form"
+      type: "merchent_form",
+      // Links will be added below after upload (if provided)
+      driversLicenseLink: "",
+      voidedCheckLink: "",
+      fnsProviderLink: "",
     };
 
+    // Validate: if checkbox toggled, ensure a file is present
+    if (formData.hasDriversLicense && !driversLicenseFile) {
+      return Swal.fire({
+        title: "Missing File",
+        text: "Please attach Driver's License file or uncheck the option.",
+        icon: "warning",
+        confirmButtonColor: "#2563eb",
+      });
+    }
+    if (formData.hasVoidedCheck && !voidedCheckFile) {
+      return Swal.fire({
+        title: "Missing File",
+        text: "Please attach Voided Check/Bank Letter file or uncheck the option.",
+        icon: "warning",
+        confirmButtonColor: "#2563eb",
+      });
+    }
+    if (formData.hasFnsProvider && !fnsProviderFile) {
+      return Swal.fire({
+        title: "Missing File",
+        text: "Please attach FNS Provider file or uncheck the option.",
+        icon: "warning",
+        confirmButtonColor: "#2563eb",
+      });
+    }
+
+    // Upload selected files (conditionally)
+    const uploading = toast.loading("Uploading documents...");
+    try {
+      if (formData.hasDriversLicense && driversLicenseFile) {
+        collectedData.driversLicenseLink = await uploadToImgBB(driversLicenseFile);
+      }
+      if (formData.hasVoidedCheck && voidedCheckFile) {
+        collectedData.voidedCheckLink = await uploadToImgBB(voidedCheckFile);
+      }
+      if (formData.hasFnsProvider && fnsProviderFile) {
+        collectedData.fnsProviderLink = await uploadToImgBB(fnsProviderFile);
+      }
+      toast.dismiss(uploading);
+    } catch (err) {
+      toast.dismiss(uploading);
+      return Swal.fire({
+        title: "Upload Failed",
+        text: err?.message || "Could not upload one or more files.",
+        icon: "error",
+        confirmButtonColor: "#2563eb",
+      });
+    }
+
+    // Continue with your existing flow: save to /merchants and send email
     try {
       await axiosSecure.post("/merchants", collectedData);
 
- const message = `
+      const message = `
 📢 NEW MERCHANT APPLICATION RECEIVED
 
 🏢 BUSINESS INFORMATION
@@ -118,9 +198,9 @@ Owner Email: ${collectedData.ownerEmail}
 Cell Phone: ${collectedData.cellPhone}
 
 📃 BUSINESS REQUIREMENTS
-Driver's License Provided: ${collectedData.hasDriversLicense ? "Yes" : "No"}
-Voided Check/Bank Letter Provided: ${collectedData.hasVoidedCheck ? "Yes" : "No"}
-FNS Provider (EAT/Proof Storage): ${collectedData.hasFnsProvider ? "Yes" : "No"}
+Driver's License Provided: ${collectedData.hasDriversLicense ? "Yes" : "No"}${collectedData.driversLicenseLink ? `\nLink: ${collectedData.driversLicenseLink}` : ""}
+Voided Check/Bank Letter Provided: ${collectedData.hasVoidedCheck ? "Yes" : "No"}${collectedData.voidedCheckLink ? `\nLink: ${collectedData.voidedCheckLink}` : ""}
+FNS Provider (EAT/Proof Storage): ${collectedData.hasFnsProvider ? "Yes" : "No"}${collectedData.fnsProviderLink ? `\nLink: ${collectedData.fnsProviderLink}` : ""}
 
 🏦 BANK DETAILS
 Bank Name: ${collectedData.bankName}
@@ -152,6 +232,13 @@ Contact Phone: ${collectedData.contactPhone}
       if (res.data.success) {
         toast.success("Application submitted successfully!");
         frm.reset();
+        // keep your state defaults
+        setFormData((p) => ({
+          ...p,
+          hasDriversLicense: false,
+          hasVoidedCheck: false,
+          hasFnsProvider: false,
+        }));
       } else {
         toast.error("Failed to send your application. Try again.");
       }
@@ -711,61 +798,62 @@ Contact Phone: ${collectedData.contactPhone}
             </div>
           </section>
 
-
           {/* Business image Section it will show when an image file input*/}
-{/* Business image Section it will show when an image file input*/}
-{(formData.hasFnsProvider || formData.hasDriversLicense || formData.hasVoidedCheck) && (
-  <section className="md:p-8 p-4 border-b border-gray-200">
-    <div className="flex items-center mb-6">
-      <div className="w-1 h-8 bg-purple-500 rounded-full mr-4"></div>
-      <h2 className="text-2xl font-bold text-gray-800">
-        Business Requirements Pdf
-      </h2>
-    </div>
+          {/* i want to post it in my the /merchants route. after some one submit an image file . you can use condition if any of these were not given. */}
+          {(formData.hasFnsProvider || formData.hasDriversLicense || formData.hasVoidedCheck) && (
+            <section className="md:p-8 p-4 border-b border-gray-200">
+              <div className="flex items-center mb-6">
+                <div className="w-1 h-8 bg-purple-500 rounded-full mr-4"></div>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Business Requirements Pdf
+                </h2>
+              </div>
 
-    <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6 gap-4">
-      {formData.hasDriversLicense && (
-        <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-blue-50 cursor-pointer transition-colors">
-          <input
-            type="file"
-            name="driversLicenseFile"
-            className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
-          />
-          <span className="text-gray-700 font-medium">
-            Driver's License PDF / Image
-          </span>
-        </label>
-      )}
+              <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6 gap-4">
+                {formData.hasDriversLicense && (
+                  <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-blue-50 cursor-pointer transition-colors">
+                    <input
+                      type="file"
+                      name="driversLicenseFile"
+                      accept=".pdf,image/*"
+                      className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-gray-700 font-medium">
+                      Driver's License PDF / Image
+                    </span>
+                  </label>
+                )}
 
-      {formData.hasVoidedCheck && (
-        <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-blue-50 cursor-pointer transition-colors">
-          <input
-            type="file"
-            name="voidedCheckFile"
-            className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
-          />
-          <span className="text-gray-700 font-medium">
-            Voided Check or Bank Letter
-          </span>
-        </label>
-      )}
+                {formData.hasVoidedCheck && (
+                  <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-blue-50 cursor-pointer transition-colors">
+                    <input
+                      type="file"
+                      name="voidedCheckFile"
+                      accept=".pdf,image/*"
+                      className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-gray-700 font-medium">
+                      Voided Check or Bank Letter
+                    </span>
+                  </label>
+                )}
 
-      {formData.hasFnsProvider && (
-        <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-blue-50 cursor-pointer transition-colors">
-          <input
-            type="file"
-            name="fnsProviderFile"
-            className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
-          />
-          <span className="text-gray-700 font-medium">
-            FNS Provider (EAT/Proof Storage)
-          </span>
-        </label>
-      )}
-    </div>
-  </section>
-)}
-
+                {formData.hasFnsProvider && (
+                  <label className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-blue-50 cursor-pointer transition-colors">
+                    <input
+                      type="file"
+                      name="fnsProviderFile"
+                      accept=".pdf,image/*"
+                      className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-gray-700 font-medium">
+                      FNS Provider (EAT/Proof Storage)
+                    </span>
+                  </label>
+                )}
+              </div>
+            </section>
+          )}
 
           {/* Banking Information Section */}
           <section className="md:p-8 p-4">
@@ -869,12 +957,14 @@ Contact Phone: ${collectedData.contactPhone}
 
           {/* Submit Button */}
           <div className="px-8 pb-8">
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               type="submit"
               className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-bold py-4 px-6 rounded-xl hover:from-blue-700 hover:to-indigo-800 focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50 transition-all transform hover:scale-105"
             >
               Submit Application
-            </button>
+            </motion.button>
           </div>
         </form>
       </div>

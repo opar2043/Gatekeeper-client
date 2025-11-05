@@ -6,7 +6,10 @@ import useAxios from "../Hooks/useAxios";
 import useAuth from "../Hooks/useAuth";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
-const img_api_key = "https://api.imgbb.com/1/upload?key=188918a9c4dee4bd0453f7ec15042a27";
+
+// Using your provided imgbb endpoint with key
+const IMGBB_UPLOAD_URL = "https://api.imgbb.com/1/upload?key=188918a9c4dee4bd0453f7ec15042a27";
+
 const Register = () => {
   const { handleRegister } = useAuth();
   const navigate = useNavigate();
@@ -14,92 +17,84 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    const name = e.target.name.value;
-    const email = e.target.email.value;
-    const password = e.target.password.value;
+    try {
+      const form = e.currentTarget;
 
-    // existing fields in your form
-    const city = e.target.city?.value;
-    const mobile = e.target.mobile?.value;
-    const company = e.target.company?.value;
+      const name = form.name.value;
+      const email = form.email.value;
+      const password = form.password.value;
 
-    // new personal info fields
-    const gender = e.target.gender?.value;
-    const dob = e.target.dob?.value; // yyyy-mm-dd from <input type="date" />
-    const photoURL = e.target.photoURL?.value || "";
-         const photo = e.tarfet.photo.files[0];
+      const city = form.city?.value;
+      const mobile = form.mobile?.value;
+      const company = form.company?.value;
 
-    const data = new FormData();
-    data.append("image", photo);
+      const gender = form.gender?.value;
+      const dob = form.dob?.value;
 
+      // File input
+      const photoFile = form.photo?.files?.[0];
 
-        fetch(img_api_key, {
-      method: "POST",
-      body: data,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Upload success:", data);
+      // minimal client validation
+      if (!photoFile) {
+        throw new Error("Please upload a profile photo.");
+      }
+      if (password.length < 6) {
+        throw new Error("Password must be at least 6 characters.");
+      }
 
-                 const photoObj = {
-          name,
-          image: data.data.url,
-        };
+      // 1) Upload photo to imgbb
+      const data = new FormData();
+      data.append("image", photoFile);
 
-       
-    // minimal client validation (optional)
-    if (password.length < 6) {
-      setIsLoading(false);
-      return Swal.fire({
-        title: "Weak Password",
-        text: "Password must be at least 6 characters.",
-        icon: "warning",
+      const uploadRes = await fetch(IMGBB_UPLOAD_URL, {
+        method: "POST",
+        body: data,
+      });
+      const uploadJson = await uploadRes.json();
+
+      if (!uploadJson?.success) {
+        throw new Error(uploadJson?.error?.message || "Image upload failed.");
+      }
+
+      // imgbb returns display_url and url; either works, prefer display_url if available
+      const uploadedPhotoURL = uploadJson?.data?.display_url || uploadJson?.data?.url;
+
+      // 2) Build the user object to persist in your DB
+      const userObj = {
+        name,
+        email,
+        role: "customer",
+        city,
+        mobile,
+        company,
+        gender,
+        dob,                 // yyyy-mm-dd
+        photoURL: uploadedPhotoURL,
+        status: "active",
+        createdAt: new Date().toISOString(),
+        lastLoginAt: null,
+      };
+
+      // 3) Create auth user, then save to /users
+      await handleRegister(email, password);
+      await axiosSecure.post("/users", userObj);
+
+      toast.success("Account created successfully!");
+      navigate("/");
+    } catch (error) {
+      Swal.fire({
+        title: "Registration Failed",
+        text: error?.response?.data?.message || error.message || "Something went wrong.",
+        icon: "error",
         confirmButtonColor: "#EAB308",
       });
+    } finally {
+      setIsLoading(false);
     }
-
-
-    const userObj = {
-      name,
-      email,
-      role: "customer",
-      city,
-      mobile,
-      company,
-      gender,
-      dob,
-      photoURL,
-      status: "active",
-      createdAt: new Date().toISOString(),
-      lastLoginAt: null,
-    };
-
-    handleRegister(email, password)
-      .then(() => {
-        return axiosSecure.post("/users", userObj);
-      })
-      .then(() => {
-        toast.success("Account created successfully!");
-        navigate("/");
-      })
-      .catch((error) => {
-        Swal.fire({
-          title: "Registration Failed",
-          text:
-            error?.response?.data?.message ||
-            error.message ||
-            "Something went wrong.",
-          icon: "error",
-          confirmButtonColor: "#EAB308",
-        });
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
   };
 
   const containerVariants = {
@@ -305,28 +300,18 @@ const Register = () => {
               </motion.div>
             </div>
 
-
-
-            {/* Optional: Profile Photo URL */}
+            {/* Photo Upload */}
             <motion.div variants={itemVariants} className="relative group">
-              {/* <input
-                type="url"
-                name="photoURL"
-                placeholder="Profile Photo URL (optional)"
-                className="w-full pl-4 pr-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-[#EAB308] focus:ring-4 focus:ring-[#EAB308]/10 outline-none text-gray-800 transition-all"
-              /> */}
-
-                      <div>
-          <label className="block text-sm font-semibold text-gray-700">
-            Upload Photo
-          </label>
-          <input
-            type="file"
-            name="photo"
-            required
-            className="w-full mt-1 p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          />
-        </div>
+              <label className="block text-sm font-semibold text-gray-700">
+                Upload Photo
+              </label>
+              <input
+                type="file"
+                name="photo"
+                accept="image/*"
+                required
+                className="w-full mt-1 p-3 border-2 border-gray-200 rounded-xl focus:border-[#EAB308] focus:ring-4 focus:ring-[#EAB308]/10 outline-none"
+              />
             </motion.div>
 
             {/* Email */}
