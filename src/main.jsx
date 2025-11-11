@@ -22,6 +22,7 @@ import CompanyForm from "./Components/Forms/CompanyForm";
 import PaymentAuthorizationForm from "./Components/Forms/PaymentAuthorizationForm";
 import RecurringChargeForm from "./Components/Forms/RecurringChargeForm";
 import Profile from "./Components/Dashboard/Profile/Profile";
+import ChatBot from "./Components/ChatBot/ChatBot";
 // import Overview from "./Components/Dashboard/Overview";
 
 const queryClient = new QueryClient();
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register></Register>,
+      },
+      {
+        path: "/chatbot",
+        element: <ChatBot></ChatBot>
       },
     ],
   },

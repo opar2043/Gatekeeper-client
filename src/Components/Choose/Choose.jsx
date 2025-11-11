@@ -236,63 +236,7 @@ const Choose = () => {
         </motion.div>
       </div>
 
-      {/* Chat Button */}
-      <motion.div 
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ 
-          delay: 1.5, 
-          type: "spring", 
-          stiffness: 260, 
-          damping: 20 
-        }}
-        className="fixed bottom-8 right-8 z-50"
-      >
-        <motion.button 
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          animate={{
-            boxShadow: [
-              "0 10px 25px rgba(250, 204, 21, 0.3)",
-              "0 10px 35px rgba(250, 204, 21, 0.5)",
-              "0 10px 25px rgba(250, 204, 21, 0.3)",
-            ]
-          }}
-          transition={{
-            boxShadow: {
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }
-          }}
-          className="w-14 h-14 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg hover:bg-yellow-500 transition-colors relative"
-        >
-          <motion.div
-            animate={{ rotate: [0, 10, -10, 10, 0] }}
-            transition={{ 
-              duration: 2, 
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          >
-            <MessageCircle className="w-7 h-7 text-gray-800" />
-          </motion.div>
-          
-          {/* Notification pulse */}
-          <motion.span
-            animate={{
-              scale: [1, 1.5, 1],
-              opacity: [0.8, 0, 0.8]
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeOut"
-            }}
-            className="absolute inset-0 bg-yellow-400 rounded-full"
-          />
-        </motion.button>
-      </motion.div>
+
     </div>
   );
 };

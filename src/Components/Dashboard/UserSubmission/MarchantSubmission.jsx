@@ -72,16 +72,19 @@ const MarchantSubmission = () => {
                       Business Name
                     </div>
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold">
+                  <th className="px-6  py-4 text-left text-sm font-semibold">
                     <User className="w-4 h-4" />
                     Owner
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold">
+                  <th className="px-6 py-4  text-left text-sm font-semibold">
                     <Mail className="w-4 h-4" />
                     Email
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold">
+                  {/* <th className="px-6 py-4 text-left text-sm font-semibold">
                     Status
+                  </th> */}
+                  <th className="px-6 py-4 text-left text-sm font-semibold">
+                    Busniess Type
                   </th>
                   <th className="px-6 py-4 text-center text-sm font-semibold">
                     Action
@@ -101,9 +104,7 @@ const MarchantSubmission = () => {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center text-white font-bold">
-                            {m.logoName?.charAt(0)?.toUpperCase() || "M"}
-                          </div>
+
                           <span className="text-sm font-semibold text-gray-800">
                             {m.logoName || "N/A"}
                           </span>
@@ -115,7 +116,10 @@ const MarchantSubmission = () => {
                       <td className="px-6 py-4 text-sm text-gray-600">
                         {m.businessEmail || "N/A"}
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-4 text-sm text-gray-600">
+                        {m.businessType || "N/A"}
+                      </td>
+                      {/* <td className="px-6 py-4">
                         {m.status === "confirmed" ? (
                           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-green-100 text-green-700 border border-green-200">
                             <CheckCircle className="w-3.5 h-3.5" />
@@ -127,7 +131,7 @@ const MarchantSubmission = () => {
                             Pending
                           </span>
                         )}
-                      </td>
+                      </td> */}
                       <td className="px-6 py-4 text-center">
                         <button
                           onClick={() => setSelectedMerchant(m)}
