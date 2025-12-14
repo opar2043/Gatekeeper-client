@@ -1,15 +1,77 @@
-# React + Vite
-https://gatekeeper-server-sigma.vercel.app/
-https://gatekeeperorg.netlify.app/
-Currently, two official plugins are available:
+# 🔐 Gatekeeper – Smart Payment & Verification Platform
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Live Client: https://gatekeeperorg.netlify.app/  
+Live Server: https://gatekeeper-server-sigma.vercel.app/
 
-## React Compiler
+Gatekeeper is a full-stack business management and verification platform built with **React (Vite)** and modern web technologies.  
+It allows users to **submit payment information with proof**, provide **digital signatures**, and interact with a **personalized AI chatbot** that understands the business deeply.  
+The system includes **admin & user dashboards** for secure management and verification.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## ⭐ Key Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 👤 User Features
+- Submit payment details securely
+- Upload **payment proof** (image / document)
+- Fill and submit required business information
+- **Digital signature sheet**:
+  - Draw or upload signature
+  - Submit signature securely
+- Track submission status
+- Personalized **AI Chatbot**:
+  - Answers questions about the business
+  - Handles FAQs and user queries
+  - Context-aware and business-specific
+
+### 🛠️ Admin Features
+- Secure **Admin Dashboard**
+- View and verify user payment submissions
+- Review uploaded payment proofs
+- Access user-submitted information
+- View and validate digital signatures
+- Manage users and records
+- Monitor chatbot usage and data (optional)
+
+---
+
+## 🤖 AI Chatbot
+- Personalized for the Gatekeeper business
+- Knows internal processes, services, and FAQs
+- Assists users with:
+  - Payment process
+  - Submission requirements
+  - General business queries
+- Scalable for future AI enhancements
+
+---
+
+## 🧰 Tech Stack
+
+### Frontend
+- **React (Vite)**
+- **Tailwind CSS**
+- **React Router**
+- **Canvas / Signature Pad**
+- **AI Chatbot Integration**
+
+### Backend
+- **Node.js**
+- **Express.js**
+- **Database (MongoDB / similar)**
+- **File Upload System**
+- **AI API Integration**
+
+### Developer Tools
+- ESLint  
+- Vite Dev Server  
+- Hot Module Replacement (HMR)  
+
+---
+
+## 🚀 Installation & Setup
+
+### 1. Clone the repositories
+```bash
+git clone https://github.com/your-username/gatekeeper-client.git
+git clone https://github.com/your-username/gatekeeper-server.git
