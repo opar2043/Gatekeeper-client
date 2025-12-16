@@ -4,7 +4,7 @@ Live Client: https://gatekeeperorg.netlify.app/
 Live Server: https://gatekeeper-server-sigma.vercel.app/
 
 Gatekeeper is a full-stack business management and verification platform built with **React (Vite)** and modern web technologies.  
-It allows users to **submit payment information with proof**, provide **digital signatures**, and interact with a **personalized AI chatbot** that understands the business deeply.  
+It allows users to **submit payment information with proof - in 3 categories form **, provide **digital signatures**, and interact with a **personalized AI chatbot** that understands the business deeply.  
 The system includes **admin & user dashboards** for secure management and verification.
 
 ---
